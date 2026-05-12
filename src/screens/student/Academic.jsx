@@ -16,14 +16,14 @@ import { motion } from 'framer-motion';
  */
 
 const TILES = [
-  { id: 'circulars', label: 'Examination\nCirculars', Icon: DocIcon       },
-  { id: 'bylaws',    label: 'Examination\nBylaws',    Icon: ScalesIcon    },
-  { id: 'subjects',  label: 'Subjects\nOffered',      Icon: NotebookIcon  },
-  { id: 'curr',      label: 'Curriculum',             Icon: ListIcon      },
-  { id: 'samples',   label: 'Sample\nQuestion Papers', Icon: QPaperIcon   },
-  { id: 'qbank',     label: 'Question\nBank',         Icon: BankIcon      },
-  { id: 'answers',   label: 'Model\nAnswers',         Icon: BadgeIcon     },
-  { id: 'stats',     label: 'Examination\nStatistics', Icon: ChartIcon    },
+  { id: 'circulars', label: 'Examination\nCirculars', Icon: DocIcon,      url: 'https://www.cbse.gov.in/cbsenew/examination_Circular.html' },
+  { id: 'bylaws',    label: 'Examination\nBylaws',    Icon: ScalesIcon,   url: 'https://www.cbse.gov.in/cbsenew/examinationbyelaws.html'   },
+  { id: 'subjects',  label: 'Subjects\nOffered',      Icon: NotebookIcon, url: 'https://cbseacademic.nic.in/curriculum_2026.html'          },
+  { id: 'curr',      label: 'Curriculum',             Icon: ListIcon,     url: 'https://cbseacademic.nic.in/curriculum_2026.html'          },
+  { id: 'samples',   label: 'Sample\nQuestion Papers', Icon: QPaperIcon,  url: 'https://www.cbse.gov.in/cbsenew/samplepaper.html'          },
+  { id: 'qbank',     label: 'Question\nBank',         Icon: BankIcon,     url: 'https://www.cbse.gov.in/cbsenew/Question_Bank.html'        },
+  { id: 'answers',   label: 'Model\nAnswers',         Icon: BadgeIcon,    url: 'https://www.cbse.gov.in/cbsenew/model-answer.html'         },
+  { id: 'stats',     label: 'Examination\nStatistics', Icon: ChartIcon,   url: 'https://www.cbse.gov.in/cbsenew/question-paper.html'       },
 ];
 
 export function Academic() {
@@ -111,10 +111,11 @@ export function Academic() {
             }}
           >
             <div className="grid grid-cols-4 gap-3">
-              {TILES.map(({ id, label, Icon }) => (
+              {TILES.map(({ id, label, Icon, url }) => (
                 <button
                   key={id}
                   type="button"
+                  onClick={() => window.open(url, '_blank', 'noopener,noreferrer')}
                   className="flex flex-col items-center gap-1.5 text-center text-white transition hover:opacity-90 focus:outline-none"
                 >
                   <span className="grid size-11 place-items-center rounded-full bg-white/20 backdrop-blur-sm">
@@ -132,6 +133,7 @@ export function Academic() {
         {/* Skill Education Module */}
         <motion.button
           type="button"
+          onClick={() => window.open('https://cbseit.in/cbse/2023/spe/applogin.aspx', '_blank', 'noopener,noreferrer')}
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.08, duration: 0.4 }}
@@ -146,6 +148,7 @@ export function Academic() {
         {/* Science Exhibition */}
         <motion.button
           type="button"
+          onClick={() => window.open('https://cbseit.in/cbse/2025/sciex/index.html', '_blank', 'noopener,noreferrer')}
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.16, duration: 0.4 }}
