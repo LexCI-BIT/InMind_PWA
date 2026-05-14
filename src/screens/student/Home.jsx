@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { StudentDock } from '../../components/StudentDock';
+import { Streaks } from './Streaks';
 
 /**
  * StudentHome — pixel-faithful rebuild from the long Figma frame.
@@ -64,7 +66,7 @@ const EXPLORER = [
     )
   },
   { 
-    id: 'mindlab', label: 'Mind Lab', path: '',
+    id: 'mindlab', label: 'Mind Lab', path: '/student/mindlab',
     iconBg: '#fed7aa', iconColor: '#7c2d12', // light peach, dark brown
     Icon: () => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -153,9 +155,27 @@ const TREND = [
 
 export function StudentHome() {
   const navigate = useNavigate();
+  const [showStreaks, setShowStreaks] = useState(false);
   const completed = 3;
   const total = 7;
   const pct = Math.round((completed / total) * 100);
+
+  /* ── Streaks overlay ── */
+  if (showStreaks) {
+    return (
+      <AnimatePresence>
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 40 }}
+          transition={{ duration: 0.3 }}
+          className="fixed inset-0 z-[100]"
+        >
+          <Streaks onBack={() => setShowStreaks(false)} />
+        </motion.div>
+      </AnimatePresence>
+    );
+  }
 
   return (
     <section className="relative mx-auto flex min-h-[100dvh] w-full max-w-[440px] flex-col overflow-hidden bg-[#181818]">
@@ -177,7 +197,7 @@ export function StudentHome() {
           <motion.button
             type="button"
             aria-label="Notifications"
-            onClick={() => navigate('/student/notifications')}
+            onClick={() => navigate('/student/home')}
             whileTap={{ scale: 0.92 }}
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -304,7 +324,7 @@ export function StudentHome() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.35, duration: 0.4 }}
-          onClick={() => navigate('/student/streaks')}
+          onClick={() => setShowStreaks(true)}
           className="mx-6 mt-4 flex items-center gap-3 rounded-[24px] px-5 py-4 cursor-pointer hover:opacity-90 transition-opacity"
           style={{ background: '#ff5c5c' }}
         >
@@ -443,7 +463,7 @@ export function StudentHome() {
           </div>
           <motion.button
             type="button"
-            onClick={() => navigate('/student/breathing')}
+            onClick={() => navigate('/student/activities')}
             whileTap={{ scale: 0.97 }}
             className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-white px-5 py-2 text-[12.5px] font-bold text-[#7c3aed] shadow-sm transition hover:bg-white/90"
           >

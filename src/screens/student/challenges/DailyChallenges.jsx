@@ -2,23 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
-/**
- * DailyChallenges — Figma-faithful rebuild of the Daily Challenges screen.
- *
- *   Top of page:
- *     • Back chevron + "Daily Challenges" centred title
- *     • "X of N completed today" + green encouragement line
- *     • Slim green progress bar
- *     • Today's Focus — big emerald gradient card with chat-bubble glyph
- *     • Categories row (SOCIAL · REFLECTION · CONFIDENCE · ZEN)
- *     • UP NEXT list — each challenge card switches between
- *         "MARK DONE" (pending, gray bg) and "COMPLETED" (dark-green bg)
- *     • Brown 5-Day Challenge Streak card
- *
- *   When every challenge is completed, the entire screen is replaced by a
- *   centred "All challenges completed 🎉" celebration view with a Continue
- *   CTA that returns to /student/home.
- */
+
 
 const INITIAL = [
   {
@@ -70,17 +54,17 @@ const INITIAL = [
 ];
 
 const CATEGORIES = [
-  { id: 'social',     label: 'SOCIAL',     Icon: PeopleIcon, color: '#4da665' },
+  { id: 'social', label: 'SOCIAL', Icon: PeopleIcon, color: '#4da665' },
   { id: 'reflection', label: 'REFLECTION', Icon: ReflectionIcon, color: '#e2a38c' },
   { id: 'confidence', label: 'CONFIDENCE', Icon: ConfidenceIcon, color: '#eb7b61' },
-  { id: 'zen',        label: 'ZEN',        Icon: MeditationIcon, color: '#c9e5d2' },
+  { id: 'zen', label: 'ZEN', Icon: MeditationIcon, color: '#c9e5d2' },
 ];
 
 const CATEGORY_ICON = {
   reflection: ReflectionIcon,
-  zen:        MeditationIcon,
+  zen: MeditationIcon,
   confidence: ConfidenceIcon,
-  social:     PeopleIcon,
+  social: PeopleIcon,
 };
 
 export function DailyChallenges() {
@@ -349,7 +333,7 @@ function ReflectionIcon() {
       <path d="M12 21a9 9 0 0 0 9-9 9 9 0 0 0-9-9 9 9 0 0 0-9 9c0 2.2.8 4.2 2 5.8L4 21l3.5-1A9.2 9.2 0 0 0 12 21z" opacity="0" />
       <path d="M9 20h2" />
       <path d="M10 20v2" />
-      <path d="M14 6a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V6z" opacity="0"/>
+      <path d="M14 6a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V6z" opacity="0" />
       <path d="M16 11V7a4 4 0 0 0-8 0v2a2 2 0 0 1-2 2v4h4.5c.3 0 .5-.2.5-.5v-1" />
       <circle cx="12" cy="11" r="2.5" />
       <path d="M12 7.5V6" />
@@ -373,10 +357,10 @@ function MeditationIcon() {
   return (
     <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor">
       <circle cx="12" cy="5" r="2.5" />
-      <path d="M16 13l-2-2-1.5 2-1.5-2-2 2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M16 13l-2-2-1.5 2-1.5-2-2 2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       <path d="M5 21c0-2.5 3.5-5 7-5s7 2.5 7 5z" />
-      <path d="M12 16v-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-      <path d="M8 12h8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      <path d="M12 16v-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      <path d="M8 12h8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
     </svg>
   );
 }
@@ -434,7 +418,7 @@ function BarsIcon() {
     <svg viewBox="0 0 20 20" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <line x1="4" y1="14" x2="4" y2="16" />
       <line x1="10" y1="10" x2="10" y2="16" />
-      <line x1="16" y1="6"  x2="16" y2="16" />
+      <line x1="16" y1="6" x2="16" y2="16" />
     </svg>
   );
 }

@@ -1,8 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
-export function Streaks() {
+export function Streaks({ onBack }) {
   const navigate = useNavigate();
+
+  const handleBack = () => {
+    if (onBack) onBack();
+    else navigate(-1);
+  };
 
   return (
     <section className="relative mx-auto flex min-h-[100dvh] w-full max-w-[440px] flex-col overflow-hidden bg-[#222222] font-sans">
@@ -15,7 +20,7 @@ export function Streaks() {
       <div className="relative z-10 flex items-center px-6 pt-safe pt-8">
         <button
           type="button"
-          onClick={() => navigate(-1)}
+          onClick={handleBack}
           className="text-white p-2 -ml-2 transition hover:opacity-70"
         >
           <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">

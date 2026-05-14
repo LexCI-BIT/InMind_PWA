@@ -13,8 +13,8 @@ export function StudentLogin() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // TODO: real auth — for now, pass through to focus selection
-    navigate('/student/focus');
+    // TODO: real auth — for now, pass through to mood check
+    navigate('/student/mood');
   };
 
   return (

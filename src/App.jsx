@@ -1,34 +1,42 @@
-import { HashRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 
+import { RoleProvider, useRole } from './context/RoleContext';
+
+// ─── Shared / Onboarding ────────────────────────────────────
 import { SplashLogo } from './screens/SplashLogo';
 import { SplashWordmark } from './screens/SplashWordmark';
 import { Onboarding } from './screens/Onboarding';
-
 import { RoleSelect } from './screens/RoleSelect';
+
+// ─── Student (10 Main Routes) ───────────────────────────────
 import { StudentLogin } from './screens/student/Login';
-import { FocusSelect } from './screens/student/FocusSelect';
-import { Academic } from './screens/student/Academic';
 import { MoodCheck } from './screens/student/MoodCheck';
-import { MoodReason } from './screens/student/MoodReason';
 import { StudentHome } from './screens/student/Home';
-import { Insights } from './screens/student/Insights';
 import { Journal } from './screens/student/journal/Journal';
-import { JournalEntry } from './screens/student/journal/JournalEntry';
 import { Quiz } from './screens/student/quiz/Quiz';
-import { QuizComplete } from './screens/student/quiz/QuizComplete';
 import { ShareThought } from './screens/student/share/ShareThought';
+import { AudioSpace } from './screens/student/AudioSpace';
 import { DailyChallenges } from './screens/student/challenges/DailyChallenges';
 import { Workshop } from './screens/student/Workshop';
-import { AudioSpace } from './screens/student/AudioSpace';
-import { Notifications } from './screens/student/Notifications';
 import { Activities } from './screens/student/Activities';
-import { Breathing } from './screens/student/Breathing';
-import { Streaks } from './screens/student/Streaks';
+import { Insights } from './screens/student/Insights';
+
+// ─── Student (Sub-routes — accessed from main routes) ───────
+import { MoodReason } from './screens/student/MoodReason';
+import { JournalEntry } from './screens/student/journal/JournalEntry';
+import { QuizComplete } from './screens/student/quiz/QuizComplete';
+import { MindLab } from './screens/student/mindlab/MindLab';
+import { WeekDetail } from './screens/student/mindlab/WeekDetail';
+import { MindLabProgress } from './screens/student/mindlab/MindLabProgress';
+
+// ─── Parent ─────────────────────────────────────────────────
 import { ParentHome } from './screens/parent/Home';
 import { ParentAnnouncements } from './screens/parent/ParentAnnouncements';
 import { ParentInsights } from './screens/parent/ParentInsights';
 import { ParentProfile } from './screens/parent/ParentProfile';
+
+// ─── Teacher ────────────────────────────────────────────────
 import { TeacherHome } from './screens/teacher/Home';
 import { QuizManager } from './screens/teacher/QuizManager';
 import { QuizSessions } from './screens/teacher/QuizSessions';
@@ -39,58 +47,88 @@ import { PriorityStudents } from './screens/teacher/PriorityStudents';
 import { CheckInSummary } from './screens/teacher/CheckInSummary';
 import { AppreciationScreen } from './screens/teacher/AppreciationScreen';
 
-/**
- * The whole app is wrapped in a HashRouter so it works equally well from
- * a static host AND when launched as an installed PWA from the home screen.
+/* ─────────────────────────────────────────────────────────────
+ *  Role-Aware Redirects
+ * ───────────────────────────────────────────────────────────── */
+
+const HOME_MAP = {
+  student: '/student/home',
+  parent: '/parent/home',
+  teacher: '/teacher/home',
+};
+
+const LOGIN_MAP = {
+  student: '/student/login',
+  parent: '/parent/home',
+  teacher: '/teacher/home',
+};
+
+function HomeRedirect() {
+  const { role } = useRole();
+  return <Navigate to={HOME_MAP[role] || '/role'} replace />;
+}
+
+function LoginRedirect() {
+  const { role } = useRole();
+  return <Navigate to={LOGIN_MAP[role] || '/role'} replace />;
+}
+
+/* ─────────────────────────────────────────────────────────────
+ *  Route Tree
  *
- * Flow:
- *   /                    → SplashLogo (auto → /wordmark)
- *   /wordmark            → SplashWordmark (auto → /onboarding)
- *   /onboarding          → 3-step paged onboarding (Skip / Next → /login)
- *   /login               → email + password (Continue → /role)
- *   /role                → Student / Parent / Teacher picker
- *   /student/mood        → animated mood check
- *   /student/mood-reason → reasons selection post-mood
- *   /student/quiz        → quiz flow
- *   /student/workshop    → workshop flow
- *   /student/audio       → audio space
- *   /student/home        → student dashboard
- *   /parent/home         → parent home (stub)
- *   /teacher/home        → teacher home (stub)
- */
+ *  Student has 10 MAIN routes + 3 sub-routes.
+ *  Everything else (Streaks, Notifications, Insights,
+ *  Breathing, Academic, FocusSelect) are COMPONENTS
+ *  rendered inside main route screens — NOT routes.
+ * ───────────────────────────────────────────────────────────── */
+
 function AnimatedRoutes() {
   const location = useLocation();
   return (
     <AnimatePresence mode="wait" initial={false}>
       <Routes location={location} key={location.pathname}>
+
+        {/* ─── Onboarding ─── */}
         <Route path="/" element={<SplashLogo />} />
         <Route path="/wordmark" element={<SplashWordmark />} />
         <Route path="/onboarding" element={<Onboarding />} />
-
         <Route path="/role" element={<RoleSelect />} />
+
+        {/* ─── Role-Aware Redirects ─── */}
+        <Route path="/login" element={<LoginRedirect />} />
+        <Route path="/home" element={<HomeRedirect />} />
+
+        {/* ─── Student: Auth ─── */}
         <Route path="/student/login" element={<StudentLogin />} />
-        <Route path="/student/focus" element={<FocusSelect />} />
-        <Route path="/student/academic" element={<Academic />} />
-        <Route path="/student/mood" element={<MoodCheck />} />
-        <Route path="/student/mood-reason" element={<MoodReason />} />
+
+        {/* ─── Student: 10 Main Routes ─── */}
         <Route path="/student/home" element={<StudentHome />} />
         <Route path="/student/insights" element={<Insights />} />
+        <Route path="/student/mood" element={<MoodCheck />} />
         <Route path="/student/journal" element={<Journal />} />
-        <Route path="/student/journal/:id" element={<JournalEntry />} />
         <Route path="/student/quiz" element={<Quiz />} />
-        <Route path="/student/quiz/complete" element={<QuizComplete />} />
         <Route path="/student/share" element={<ShareThought />} />
+        <Route path="/student/audio" element={<AudioSpace />} />
         <Route path="/student/challenges" element={<DailyChallenges />} />
         <Route path="/student/workshop" element={<Workshop />} />
-        <Route path="/student/audio" element={<AudioSpace />} />
-        <Route path="/student/notifications" element={<Notifications />} />
+        <Route path="/student/mindspace" element={<Activities />} />
         <Route path="/student/activities" element={<Activities />} />
-        <Route path="/student/breathing" element={<Breathing />} />
-        <Route path="/student/streaks" element={<Streaks />} />
+
+        {/* ─── Student: Sub-routes ─── */}
+        <Route path="/student/mood/reason" element={<MoodReason />} />
+        <Route path="/student/journal/:id" element={<JournalEntry />} />
+        <Route path="/student/quiz/complete" element={<QuizComplete />} />
+        <Route path="/student/mindlab" element={<MindLab />} />
+        <Route path="/student/mindlab/week/:weekId" element={<WeekDetail />} />
+        <Route path="/student/mindlab/progress" element={<MindLabProgress />} />
+
+        {/* ─── Parent Routes ─── */}
         <Route path="/parent/home" element={<ParentHome />} />
         <Route path="/parent/announcements" element={<ParentAnnouncements />} />
         <Route path="/parent/insights" element={<ParentInsights />} />
         <Route path="/parent/profile" element={<ParentProfile />} />
+
+        {/* ─── Teacher Routes ─── */}
         <Route path="/teacher/home" element={<TeacherHome />} />
         <Route path="/teacher/sessions" element={<QuizSessions />} />
         <Route path="/teacher/create-quiz" element={<QuizCreation />} />
@@ -100,6 +138,8 @@ function AnimatedRoutes() {
         <Route path="/teacher/priority-students" element={<PriorityStudents />} />
         <Route path="/teacher/checkin-summary" element={<CheckInSummary />} />
         <Route path="/teacher/appreciation" element={<AppreciationScreen />} />
+
+        {/* ─── Fallback ─── */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </AnimatePresence>
@@ -109,9 +149,11 @@ function AnimatedRoutes() {
 export default function App() {
   return (
     <main className="min-h-[100dvh] bg-neutral-950">
-      <HashRouter>
-        <AnimatedRoutes />
-      </HashRouter>
+      <BrowserRouter>
+        <RoleProvider>
+          <AnimatedRoutes />
+        </RoleProvider>
+      </BrowserRouter>
     </main>
   );
 }

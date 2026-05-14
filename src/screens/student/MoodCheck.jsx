@@ -85,7 +85,7 @@ export function MoodCheck() {
 
           {/* Submit */}
           <div style={{ position:'absolute', bottom:32, width:'100%', display:'flex', justifyContent:'center', zIndex:10 }}>
-            <motion.button type="button" onClick={() => { if(sel) nav('/student/mood-reason',{state:{mood:sel},replace:true}); }} whileTap={{scale:0.96}}
+            <motion.button type="button" onClick={() => { if(sel) nav('/student/mood/reason',{state:{mood:sel},replace:true}); }} whileTap={{scale:0.96}}
               style={{ background:'#242424', color:'#fff', border:'none', padding:'16px 56px', borderRadius:32, fontSize:16, fontWeight:700, cursor:sel?'pointer':'not-allowed', opacity:sel?1:0.4, transition:'opacity 0.3s', fontFamily:"'Poppins',sans-serif" }}>
               Submit
             </motion.button>

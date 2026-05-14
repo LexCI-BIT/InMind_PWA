@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Screen } from '../components/Screen';
+import { useRole } from '../context/RoleContext';
 
 const ROLES = [
   {
@@ -11,7 +12,7 @@ const ROLES = [
     Icon: GraduationIcon,
     iconBg: 'bg-brand-purple-soft',
     iconColor: 'text-brand-purple',
-    next: '/student/login',
+    next: '/login',
   },
   {
     id: 'parent',
@@ -20,7 +21,7 @@ const ROLES = [
     Icon: TreeIcon,
     iconBg: 'bg-neutral-200',
     iconColor: 'text-neutral-700',
-    next: '/parent/home',
+    next: '/home',
   },
   {
     id: 'teacher',
@@ -29,17 +30,21 @@ const ROLES = [
     Icon: UserCardIcon,
     iconBg: 'bg-neutral-200',
     iconColor: 'text-neutral-700',
-    next: '/teacher/home',
+    next: '/home',
   },
 ];
 
 export function RoleSelect() {
   const navigate = useNavigate();
+  const { setRole } = useRole();
   const [selected, setSelected] = useState('student');
 
   const continueToPortal = () => {
     const role = ROLES.find((r) => r.id === selected);
-    if (role) navigate(role.next);
+    if (role) {
+      setRole(role.id);
+      navigate(role.next);
+    }
   };
 
   return (
