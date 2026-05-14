@@ -2,9 +2,14 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
 
-export function Breathing() {
+export function Breathing({ onBack }) {
   const navigate = useNavigate();
   const [phase, setPhase] = useState('Inhale'); // 'Inhale' | 'Exhale'
+
+  const handleBack = () => {
+    if (onBack) onBack();
+    else navigate(-1);
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -22,7 +27,7 @@ export function Breathing() {
       <div className="relative z-10 px-6 pt-safe pt-8">
         <button
           type="button"
-          onClick={() => navigate(-1)}
+          onClick={handleBack}
           className="text-white p-2 -ml-2 transition hover:opacity-70"
         >
           <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">

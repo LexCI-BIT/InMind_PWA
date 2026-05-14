@@ -1,9 +1,62 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { StudentDock } from '../../components/StudentDock';
+import { FocusTimer } from './FocusTimer';
+import { Breathing } from './Breathing';
+import { Meditation } from './Meditation';
+import { YogaSession } from './YogaSession';
 
 export function Activities() {
   const navigate = useNavigate();
+  const [showFocus, setShowFocus] = useState(false);
+  const [showBreathing, setShowBreathing] = useState(false);
+  const [showMeditation, setShowMeditation] = useState(false);
+  const [showYoga, setShowYoga] = useState(false);
+
+  /* ── Breathing overlay ── */
+  if (showBreathing) {
+    return (
+      <AnimatePresence>
+        <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 40 }} transition={{ duration: 0.3 }} className="fixed inset-0 z-[100]">
+          <Breathing onBack={() => setShowBreathing(false)} />
+        </motion.div>
+      </AnimatePresence>
+    );
+  }
+
+  /* ── Focus Timer overlay ── */
+  if (showFocus) {
+    return (
+      <AnimatePresence>
+        <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 40 }} transition={{ duration: 0.3 }} className="fixed inset-0 z-[100]">
+          <FocusTimer onBack={() => setShowFocus(false)} />
+        </motion.div>
+      </AnimatePresence>
+    );
+  }
+
+  /* ── Meditation overlay ── */
+  if (showMeditation) {
+    return (
+      <AnimatePresence>
+        <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 40 }} transition={{ duration: 0.3 }} className="fixed inset-0 z-[100]">
+          <Meditation onBack={() => setShowMeditation(false)} />
+        </motion.div>
+      </AnimatePresence>
+    );
+  }
+
+  /* ── Yoga overlay ── */
+  if (showYoga) {
+    return (
+      <AnimatePresence>
+        <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 40 }} transition={{ duration: 0.3 }} className="fixed inset-0 z-[100]">
+          <YogaSession onBack={() => setShowYoga(false)} />
+        </motion.div>
+      </AnimatePresence>
+    );
+  }
 
   return (
     <section className="relative mx-auto flex min-h-[100dvh] w-full max-w-[440px] flex-col overflow-hidden bg-[#222222] font-sans pb-24">
@@ -31,45 +84,49 @@ export function Activities() {
       {/* Stacked Cards */}
       <div className="relative z-10 px-5 mt-10 flex-1">
         
-        {/* Blue Card */}
+        {/* Blue Card — Breathing */}
         <motion.div 
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.4 }}
-          className="w-full rounded-t-[32px] bg-[#93c5fd] pt-6 pb-20 px-6"
+          onClick={() => setShowBreathing(true)}
+          className="w-full rounded-t-[32px] bg-[#93c5fd] pt-6 pb-20 px-6 cursor-pointer hover:brightness-105 transition"
         >
           <h2 className="text-[22px] font-bold text-[#1f1f1f] leading-tight">Breathing</h2>
           <p className="text-[12px] text-[#1f1f1f]/80 mt-0.5">breathe and meditate</p>
         </motion.div>
 
-        {/* Yellow Card */}
+        {/* Yellow Card — Focus */}
         <motion.div 
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.4, delay: 0.1 }}
-          className="relative w-full rounded-t-[32px] bg-[#f59e0b] pt-6 pb-20 px-6 mt-[-64px] shadow-[0_-4px_16px_rgba(0,0,0,0.1)]"
+          onClick={() => setShowFocus(true)}
+          className="relative w-full rounded-t-[32px] bg-[#f59e0b] pt-6 pb-20 px-6 mt-[-64px] shadow-[0_-4px_16px_rgba(0,0,0,0.1)] cursor-pointer hover:brightness-105 transition"
         >
           <h2 className="text-[22px] font-bold text-[#1f1f1f] leading-tight">Focus</h2>
-          <p className="text-[12px] text-[#1f1f1f]/80 mt-0.5">breathe and meditate</p>
+          <p className="text-[12px] text-[#1f1f1f]/80 mt-0.5">pomodoro focus timer</p>
         </motion.div>
 
-        {/* Salmon Card */}
+        {/* Salmon Card — Meditation */}
         <motion.div 
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.4, delay: 0.2 }}
-          className="relative w-full rounded-t-[32px] bg-[#f28468] pt-6 pb-20 px-6 mt-[-64px] shadow-[0_-4px_16px_rgba(0,0,0,0.1)]"
+          onClick={() => setShowMeditation(true)}
+          className="relative w-full rounded-t-[32px] bg-[#f28468] pt-6 pb-20 px-6 mt-[-64px] shadow-[0_-4px_16px_rgba(0,0,0,0.1)] cursor-pointer hover:brightness-105 transition"
         >
           <h2 className="text-[22px] font-bold text-[#1f1f1f] leading-tight">Meditation</h2>
-          <p className="text-[12px] text-[#1f1f1f]/80 mt-0.5">breathe and meditate</p>
+          <p className="text-[12px] text-[#1f1f1f]/80 mt-0.5">guided meditation timer</p>
         </motion.div>
 
-        {/* Mint Card (Front) */}
+        {/* Mint Card — Yoga */}
         <motion.div 
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.4, delay: 0.3 }}
-          className="relative w-full rounded-[32px] bg-[#8ed2b1] p-6 mt-[-64px] shadow-[0_-4px_20px_rgba(0,0,0,0.15)] flex justify-between overflow-hidden"
+          onClick={() => setShowYoga(true)}
+          className="relative w-full rounded-[32px] bg-[#8ed2b1] p-6 mt-[-64px] shadow-[0_-4px_20px_rgba(0,0,0,0.15)] flex justify-between overflow-hidden cursor-pointer hover:brightness-105 transition"
         >
           <div className="flex flex-col justify-between">
             <div>

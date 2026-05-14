@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { StudentDock } from '../../components/StudentDock';
 import { Streaks } from './Streaks';
+import { StudentCalendar } from './Calendar';
+import { Breathing } from './Breathing';
 
 /**
  * StudentHome — pixel-faithful rebuild from the long Figma frame.
@@ -156,6 +158,8 @@ const TREND = [
 export function StudentHome() {
   const navigate = useNavigate();
   const [showStreaks, setShowStreaks] = useState(false);
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [showBreathing, setShowBreathing] = useState(false);
   const completed = 3;
   const total = 7;
   const pct = Math.round((completed / total) * 100);
@@ -172,6 +176,40 @@ export function StudentHome() {
           className="fixed inset-0 z-[100]"
         >
           <Streaks onBack={() => setShowStreaks(false)} />
+        </motion.div>
+      </AnimatePresence>
+    );
+  }
+
+  /* ── Calendar overlay ── */
+  if (showCalendar) {
+    return (
+      <AnimatePresence>
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 40 }}
+          transition={{ duration: 0.3 }}
+          className="fixed inset-0 z-[100]"
+        >
+          <StudentCalendar onBack={() => setShowCalendar(false)} />
+        </motion.div>
+      </AnimatePresence>
+    );
+  }
+
+  /* ── Breathing overlay ── */
+  if (showBreathing) {
+    return (
+      <AnimatePresence>
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 40 }}
+          transition={{ duration: 0.3 }}
+          className="fixed inset-0 z-[100]"
+        >
+          <Breathing onBack={() => setShowBreathing(false)} />
         </motion.div>
       </AnimatePresence>
     );
@@ -194,21 +232,43 @@ export function StudentHome() {
             </p>
           </motion.div>
 
-          <motion.button
-            type="button"
-            aria-label="Notifications"
-            onClick={() => navigate('/student/home')}
-            whileTap={{ scale: 0.92 }}
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.4, delay: 0.1 }}
-            className="relative grid size-11 place-items-center rounded-full bg-[#ffb703] shadow-md shadow-amber-400/25 shrink-0 ml-4"
-          >
-            <svg viewBox="0 0 24 24" className="h-[20px] w-[20px]" fill="#ffffff">
-              <path d="M12 2a6 6 0 0 0-6 6c0 5-2 7-3 8h18c-1-1-3-3-3-8a6 6 0 0 0-6-6zM10.3 20a2 2 0 0 0 3.4 0z" />
-            </svg>
-            <span className="absolute right-2 top-2 size-2.5 rounded-full bg-[#ef4444]" />
-          </motion.button>
+          <div className="flex items-center gap-2 shrink-0 ml-4">
+            {/* Calendar button */}
+            <motion.button
+              type="button"
+              aria-label="Calendar"
+              onClick={() => setShowCalendar(true)}
+              whileTap={{ scale: 0.92 }}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4, delay: 0.05 }}
+              className="grid size-11 place-items-center rounded-full bg-[#2a2a2a] border border-[#3a3a3a] shadow-md"
+            >
+              <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                <line x1="16" y1="2" x2="16" y2="6" />
+                <line x1="8" y1="2" x2="8" y2="6" />
+                <line x1="3" y1="10" x2="21" y2="10" />
+              </svg>
+            </motion.button>
+
+            {/* Notifications button */}
+            <motion.button
+              type="button"
+              aria-label="Notifications"
+              onClick={() => navigate('/student/home')}
+              whileTap={{ scale: 0.92 }}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4, delay: 0.1 }}
+              className="relative grid size-11 place-items-center rounded-full bg-[#ffb703] shadow-md shadow-amber-400/25"
+            >
+              <svg viewBox="0 0 24 24" className="h-[20px] w-[20px]" fill="#ffffff">
+                <path d="M12 2a6 6 0 0 0-6 6c0 5-2 7-3 8h18c-1-1-3-3-3-8a6 6 0 0 0-6-6zM10.3 20a2 2 0 0 0 3.4 0z" />
+              </svg>
+              <span className="absolute right-2 top-2 size-2.5 rounded-full bg-[#ef4444]" />
+            </motion.button>
+          </div>
         </div>
 
         {/* Mood blob */}
@@ -463,7 +523,7 @@ export function StudentHome() {
           </div>
           <motion.button
             type="button"
-            onClick={() => navigate('/student/activities')}
+            onClick={() => setShowBreathing(true)}
             whileTap={{ scale: 0.97 }}
             className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-white px-5 py-2 text-[12.5px] font-bold text-[#7c3aed] shadow-sm transition hover:bg-white/90"
           >
