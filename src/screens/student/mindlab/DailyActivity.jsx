@@ -42,7 +42,7 @@ export function DailyActivity({ week, dayIndex, onBack, onComplete }) {
   const btnLabel = step===0?"Let's Reflect →":step===5?'Completed →':step===6?'Finish →':'Next →';
 
   return (
-    <section className="relative mx-auto flex min-h-[100dvh] w-full max-w-[440px] flex-col overflow-hidden bg-[#1a1a1a] font-sans">
+    <section className="relative mx-auto flex h-[100dvh] w-full max-w-[440px] flex-col overflow-hidden bg-[#1a1a1a] font-sans">
       <div className="absolute -right-16 top-16 size-40 rounded-full blur-[80px] opacity-25 pointer-events-none" style={{background:t.accent}}/>
       <div className="absolute -left-12 bottom-32 size-32 rounded-full blur-[60px] opacity-15 pointer-events-none" style={{background:t.accent}}/>
 
@@ -60,8 +60,8 @@ export function DailyActivity({ week, dayIndex, onBack, onComplete }) {
         </div>
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 flex-1 flex flex-col px-6 pt-5 pb-6 overflow-y-auto">
+      {/* Scrollable Content */}
+      <div className="relative z-10 flex-1 flex flex-col px-6 pt-5 pb-4 overflow-y-auto min-h-0 no-scrollbar">
         <AnimatePresence mode="wait" custom={dir}>
           <motion.div key={step} custom={dir} variants={slide} initial="enter" animate="center" exit="exit" transition={{duration:0.25}} className="flex-1 flex flex-col">
             {step===0 && <PromptStep c={c} t={t} v={promptAns} set={setPromptAns}/>}
@@ -73,9 +73,12 @@ export function DailyActivity({ week, dayIndex, onBack, onComplete }) {
             {step===6 && <CompleteStep week={week} di={dayIndex}/>}
           </motion.div>
         </AnimatePresence>
+      </div>
 
+      {/* Fixed Bottom Button */}
+      <div className="relative z-10 px-6 pb-6 pt-3 bg-gradient-to-t from-[#1a1a1a] via-[#1a1a1a] to-transparent">
         <motion.button type="button" onClick={next} whileTap={{scale:0.96}} whileHover={{scale:1.02}}
-          className="mt-5 w-full rounded-full py-3.5 text-[15px] font-bold shadow-lg transition"
+          className="w-full rounded-full py-3.5 text-[15px] font-bold shadow-lg transition"
           style={{background:t.btn, color:t.btnT, boxShadow:`0 8px 24px ${t.btn}33`}}>
           {btnLabel}
         </motion.button>
