@@ -256,7 +256,7 @@ export function StudentHome() {
             <motion.button
               type="button"
               aria-label="Notifications"
-              onClick={() => navigate('/student/home')}
+              onClick={() => navigate('/student/notifications')}
               whileTap={{ scale: 0.92 }}
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}

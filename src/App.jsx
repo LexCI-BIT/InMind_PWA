@@ -32,6 +32,8 @@ import { MindLabProgress } from './screens/student/mindlab/MindLabProgress';
 import { StudentProfile } from './screens/student/Profile';
 import { PathSelect } from './screens/student/PathSelect';
 import { Academic } from './screens/student/Academic';
+import { WeeklyDetail } from './screens/student/mindlab/WeeklyDetail';
+import { Notifications } from './screens/student/Notifications';
 
 // ─── Parent ─────────────────────────────────────────────────
 import { ParentHome } from './screens/parent/Home';
@@ -126,7 +128,9 @@ function AnimatedRoutes() {
         <Route path="/student/mindlab" element={<MindLab />} />
         <Route path="/student/mindlab/week/:weekId" element={<WeekDetail />} />
         <Route path="/student/mindlab/progress" element={<MindLabProgress />} />
+        <Route path="/student/mindlab/weekly/:weekId" element={<WeeklyDetail />} />
         <Route path="/student/profile" element={<StudentProfile />} />
+        <Route path="/student/notifications" element={<Notifications />} />
 
         {/* ─── Parent Routes ─── */}
         <Route path="/parent/home" element={<ParentHome />} />

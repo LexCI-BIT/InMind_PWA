@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { WEEKS as ALL_WEEKS } from './weeklyData';
 
 /**
  * MindLab — weekly activity hub.
@@ -8,7 +9,7 @@ import { motion } from 'framer-motion';
  *   • Back chevron
  *   • Dark "Search" pill
  *   • ONE large brown card that contains:
- *       – "Hey, jessica" subtle line
+ *       – "Hey, Aryan" subtle line
  *       – Big 3-line headline "You've completed 2 activities this week"
  *       – Amber "View Progress ↗" pill
  *       – "View all" link, right-aligned above the rail
@@ -16,17 +17,16 @@ import { motion } from 'framer-motion';
  *         WEEK label + number stack in amber (on white tile) / dark (on amber tile),
  *         title bold + black at the top
  *
- * Each tile → /student/mindlab/week/:weekId.
+ * Each tile → /student/mindlab/weekly/:weekId  (32-week curriculum).
  */
 
-const WEEKS = [
-  { id: 1, number: '01', title: 'Clarity &\nConfidence',     tone: 'light' },
-  { id: 2, number: '02', title: 'Leadership',                tone: 'amber' },
-  { id: 3, number: '03', title: 'Self-\nawareness',          tone: 'light' },
-  { id: 4, number: '04', title: 'Emotional\nIntelligence',   tone: 'amber' },
-  { id: 5, number: '05', title: 'Growth\nMindset',           tone: 'light' },
-  { id: 6, number: '06', title: 'Resilience',                tone: 'amber' },
-];
+
+const WEEKS = ALL_WEEKS.map((w, i) => ({
+  id: w.id,
+  number: String(w.id).padStart(2, '0'),
+  title: w.title,
+  tone: i % 2 === 0 ? 'light' : 'amber',
+}));
 
 export function MindLab() {
   const navigate = useNavigate();
@@ -80,7 +80,7 @@ export function MindLab() {
         >
           {/* Greeting + headline + CTA */}
           <div className="px-6 pt-7">
-            <p className="text-[15px] text-white/80">Hey, jessica</p>
+            <p className="text-[15px] text-white/80">Hey, Aryan</p>
             <h2 className="mt-3 text-[28px] font-bold leading-[1.15] text-white">
               You've completed<br />2 activities this<br />week
             </h2>
@@ -116,7 +116,7 @@ export function MindLab() {
                 key={w.id}
                 week={w}
                 index={i}
-                onOpen={() => navigate(`/student/mindlab/week/${w.id}`)}
+                onOpen={() => navigate(`/student/mindlab/weekly/${w.id}`)}
               />
             ))}
           </div>
