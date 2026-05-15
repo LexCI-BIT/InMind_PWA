@@ -14,7 +14,7 @@ const TABS = [
   { id: 'edit',    label: 'Journal',   path: '/student/journal',  Icon: EditIcon  },
   { id: 'home',    label: 'Home',      path: '/student/home',     Icon: HomeIcon, prominent: true },
   { id: 'chart',   label: 'Insights',  path: '/student/insights', Icon: ChartIcon },
-  { id: 'profile', label: 'Profile',   path: '/student/home',     Icon: UserIcon  },
+  { id: 'profile', label: 'Profile',   path: '/student/profile', Icon: UserIcon  },
 ];
 
 export function StudentDock({ active = 'home' }) {
