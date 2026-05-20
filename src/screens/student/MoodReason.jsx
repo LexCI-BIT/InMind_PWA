@@ -140,10 +140,6 @@ export function MoodReason() {
             whileTap={{scale:0.96}}
             style={{ 
               background: mood.pill, 
-              color: mood.pillText === '#1a1a1a' && mood.pill !== '#3bcece' ? '#1a1a1a' : '#ffffff', // Ensure contrast, cyan pill text should be black but check screenshot
-              // In the screenshot, the Angry "Check In" has white text, despite the top pill having black text. 
-              // Wait, let's just use white text for the Check In button for Sad, but maybe dark for Happy.
-              // Let's stick to the color contrast from the mood config, or just force white if it's not yellow.
               color: mood.id === 'happy' ? '#1a1a1a' : '#ffffff',
               border:'none', 
               padding:'16px', 
