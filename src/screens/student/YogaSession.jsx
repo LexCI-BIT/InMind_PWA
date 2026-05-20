@@ -156,7 +156,7 @@ export function YogaSession({ onBack }) {
       )}
 
       {/* Scrollable body */}
-      <div className="relative z-10 flex-1 overflow-y-auto">
+      <div className="relative z-10 flex-1 overflow-y-auto no-scrollbar">
 
         {!showPlayer ? (
           <div className="px-6 mt-3 mb-6">
