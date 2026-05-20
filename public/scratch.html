@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body { background: #0d0d12; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+  .container { position: relative; width: 340px; height: 460px; border: 1px solid red; overflow: hidden; }
+  img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.7; mix-blend-mode: screen; }
+  #log { position: fixed; top: 10px; left: 10px; background: rgba(0,0,0,0.8); padding: 10px; font-family: monospace; }
+  .dot { position: absolute; width: 10px; height: 10px; background: red; border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none; }
+</style>
+</head>
+<body>
+<div id="log">Click body parts</div>
+<div class="container" id="box">
+  <img src="/illustrations/body_outline.png" id="img">
+</div>
+<script>
+  const box = document.getElementById('box');
+  const log = document.getElementById('log');
+  box.addEventListener('click', (e) => {
+    const rect = box.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const px = (x / rect.width * 100).toFixed(1);
+    const py = (y / rect.height * 100).toFixed(1);
+    
+    log.innerHTML = `left: '${px}%', top: '${py}%'`;
+    
+    const dot = document.createElement('div');
+    dot.className = 'dot';
+    dot.style.left = px + '%';
+    dot.style.top = py + '%';
+    box.appendChild(dot);
+  });
+</script>
+</body>
+</html>

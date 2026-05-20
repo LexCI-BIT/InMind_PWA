@@ -40,105 +40,96 @@ function dateLine() {
 const EXPLORER = [
   { 
     id: 'journal', label: 'Journal', path: '/student/journal',
-    iconBg: '#c4b5fd', iconColor: '#312e81', // light purple background, dark purple icon
+    iconBg: '#c4b5fd', iconColor: '#5b21b6',
     Icon: () => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 20h9" />
-        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
-        <path d="M5 10h3" />
-        <path d="M6 14h2" />
+        <path d="M4 4h2v16H4z" fill="currentColor" opacity="0.3"/>
+        <rect x="4" y="3" width="16" height="18" rx="2"/>
+        <path d="M9 8h6"/>
+        <path d="M9 12h6"/>
+        <path d="M9 16h4"/>
       </svg>
     )
   },
   { 
     id: 'challenges', label: 'Daily Challenges', path: '/student/challenges',
-    iconBg: '#99f6e4', iconColor: '#0f766e', // light teal, dark teal
+    iconBg: '#99f6e4', iconColor: '#0f766e',
     Icon: () => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="10" />
-        <circle cx="12" cy="12" r="6" />
-        <circle cx="12" cy="12" r="2" />
-        <path d="M12 2v4" />
-        <path d="M12 18v4" />
-        <path d="M2 12h4" />
-        <path d="M18 12h4" />
-        <path d="m15.5 8.5 5-5" />
-        <path d="m20.5 3.5-3 1 2 2z" fill="currentColor"/>
+        <circle cx="12" cy="12" r="10"/>
+        <circle cx="12" cy="12" r="6"/>
+        <circle cx="12" cy="12" r="2"/>
+        <path d="M12 2v4"/>
+        <path d="M12 18v4"/>
+        <path d="M2 12h4"/>
+        <path d="M18 12h4"/>
       </svg>
     )
   },
   { 
     id: 'mindlab', label: 'Mind Lab', path: '/student/mindlab',
-    iconBg: '#fed7aa', iconColor: '#7c2d12', // light peach, dark brown
+    iconBg: '#fed7aa', iconColor: '#9a3412',
     Icon: () => (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="m14.4 14.4 5.6-5.6" />
-        <path d="m20 12-2-2" />
-        <path d="m22 10-2-2" />
-        <path d="m10 22-2-2" />
-        <path d="m12 20-2-2" />
-        <path d="m4 9.6 5.6-5.6" />
-        <path d="M7 6 5 4" />
-        <path d="M9 8 7 6" />
-        <path d="M18 15l-2-2" />
-        <path d="M16 17l-2-2" />
-        <path d="M8.5 8.5l7 7" />
-        <path d="M4 14.4l5.6 5.6" />
-        <path d="M14.4 4l5.6 5.6" />
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M6 7v10"/>
+        <path d="M18 7v10"/>
+        <path d="M6 12h12"/>
+        <rect x="3" y="8" width="3" height="8" rx="1"/>
+        <rect x="18" y="8" width="3" height="8" rx="1"/>
       </svg>
     )
   },
   { 
     id: 'quiz', label: 'Quiz', path: '/student/quiz',
-    iconBg: '#e5e5e5', iconColor: '#374151', // light grey, dark grey
+    iconBg: '#e5e5e5', iconColor: '#374151',
     Icon: () => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-        <path d="M9 17V7h6v10" />
-        <path d="M12 10v.01" />
-        <path d="M12 14v.01" />
-        <path d="M9 13.5h6" />
-        <circle cx="12" cy="11" r="2" />
-        <path d="M12 13v1" />
+        <rect x="4" y="2" width="16" height="20" rx="2"/>
+        <path d="M9 10a3 3 0 1 1 3 3v1"/>
+        <circle cx="12" cy="17" r="0.5" fill="currentColor"/>
       </svg>
     )
   },
   { 
     id: 'share', label: 'Share a Thought', path: '/student/share',
-    iconBg: '#c4b5fd', iconColor: '#312e81', // light purple, dark purple
+    iconBg: '#c4b5fd', iconColor: '#5b21b6',
     Icon: () => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 2a8 8 0 0 0-8 8c0 2.2.9 4.2 2.3 5.6L8 17.5V22h8v-4.5l1.7-1.9A8 8 0 0 0 12 2z" />
-        <path d="M12 7v4" />
-        <path d="M12 14h.01" />
-        <circle cx="12" cy="10" r="3" />
+        <circle cx="12" cy="10" r="7"/>
+        <path d="M12 17v4"/>
+        <path d="M8 21h8"/>
+        <circle cx="12" cy="10" r="3"/>
+        <path d="M12 7v0"/>
+        <path d="M15 10h0"/>
+        <path d="M12 13v0"/>
+        <path d="M9 10h0"/>
       </svg>
     )
   },
   { 
     id: 'audio', label: 'Audio Space', path: '/student/audio',
-    iconBg: '#a7f3d0', iconColor: '#0f766e', // light mint, dark teal
+    iconBg: '#99f6e4', iconColor: '#0f766e',
     Icon: () => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="2" y="4" width="20" height="16" rx="2" ry="2" />
-        <path d="M2 8h20" />
-        <path d="M6 4v4" />
-        <path d="M10 4v4" />
-        <path d="M14 4v4" />
-        <path d="M18 4v4" />
+        <rect x="2" y="6" width="20" height="14" rx="2"/>
+        <path d="M2 6l9-3h2l9 3"/>
+        <path d="M2 10h20"/>
+        <path d="M7 6v4"/>
+        <path d="M12 6v4"/>
+        <path d="M17 6v4"/>
       </svg>
     )
   },
   { 
     id: 'workshop', label: 'Workshop', path: '/student/workshop',
-    iconBg: '#fef08a', iconColor: '#854d0e', // light yellow, dark brown
+    iconBg: '#fef08a', iconColor: '#854d0e',
     Icon: () => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M15 13H9V7h6v6z" />
-        <path d="M17 3H7c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z" />
-        <path d="M12 17h.01" />
-        <path d="M7 21l3-4" />
-        <path d="M17 21l-3-4" />
+        <rect x="3" y="3" width="18" height="14" rx="2"/>
+        <path d="M8 21h8"/>
+        <path d="M12 17v4"/>
+        <path d="M8 8l3 3-3 3"/>
+        <path d="M14 14h3"/>
       </svg>
     )
   },
@@ -305,26 +296,8 @@ export function StudentHome() {
           </motion.div>
         </div>
 
-        {/* Check-In card */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.25, duration: 0.4 }}
-          className="mx-5 rounded-[36px] border border-white/10 bg-[#2b2b2b] p-7 shadow-lg shadow-black/20"
-        >
-          <h2 className="text-[22px] font-bold leading-[1.15] text-white">
-            Start Todays<br />Emotional Check-In
-          </h2>
-          <p className="mt-2.5 text-[14px] text-[#9ca3af]">Tune into your inner self</p>
-          <motion.button
-            type="button"
-            onClick={() => navigate('/student/mood')}
-            whileTap={{ scale: 0.97 }}
-            className="mt-6 w-full rounded-full bg-[#ffc14d] py-3.5 text-[15px] font-bold text-[#4a2e05] transition hover:bg-[#ffb01a]"
-          >
-            Start Check-In
-          </motion.button>
-        </motion.div>
+
+
 
         {/* Today's Progress */}
         <motion.div
@@ -389,9 +362,9 @@ export function StudentHome() {
           style={{ background: '#ff5c5c' }}
         >
           <span className="grid size-11 shrink-0 place-items-center rounded-full bg-white/20">
-            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="white">
-              <path d="M12 2c1 4 4 5 4 9a4 4 0 0 1-8 0c0-2 1-3 1-5 0-1.5-.5-3-1-4 2 0 3.3 1 4 0z" />
-              <path d="M12 8c.6 1.5 2 2 2 4a2 2 0 0 1-4 0c0-1.5 1-2 2-4z" fill="#fbbf24" />
+            <svg viewBox="0 0 24 24" className="h-8 w-8" fill="none">
+              <path d="M12 2C12 2 7 8 7 13a5 5 0 0 0 10 0c0-5-5-11-5-11z" fill="#fff" />
+              <path d="M12 10c0 0-2 2.5-2 5a2 2 0 0 0 4 0c0-2.5-2-5-2-5z" fill="#fbbf24" />
             </svg>
           </span>
           <div className="flex-1">

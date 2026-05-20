@@ -92,7 +92,7 @@ export function PathSelect() {
         {/* ── Non-Academic Card ── */}
         <motion.button
           type="button"
-          onClick={() => navigate('/student/mood')}
+          onClick={() => navigate('/student/daily-checkin')}
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.2 }}

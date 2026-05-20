@@ -21,6 +21,7 @@ import { DailyChallenges } from './screens/student/challenges/DailyChallenges';
 import { Workshop } from './screens/student/Workshop';
 import { Activities } from './screens/student/Activities';
 import { Insights } from './screens/student/Insights';
+import DailyCheckinFlow from './screens/student/checkin/DailyCheckinFlow';
 
 // ─── Student (Sub-routes — accessed from main routes) ───────
 import { MoodReason } from './screens/student/MoodReason';
@@ -112,6 +113,7 @@ function AnimatedRoutes() {
         <Route path="/student/academic" element={<Academic />} />
         <Route path="/student/insights" element={<Insights />} />
         <Route path="/student/mood" element={<MoodCheck />} />
+        <Route path="/student/daily-checkin" element={<DailyCheckinFlow />} />
         <Route path="/student/journal" element={<Journal />} />
         <Route path="/student/quiz" element={<Quiz />} />
         <Route path="/student/share" element={<ShareThought />} />
