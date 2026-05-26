@@ -1,12 +1,25 @@
 import React, { useState } from 'react';
 import { BODY_AREAS, SENSATIONS } from './bodyData';
 
-export function SensationStep({ area, currentSensation, onSave }) {
+export function SensationStep({ area, currentSensation, onSave, onTrackTap, onTrackOptionChange, onTrackFirstInteraction }) {
   const [sensation, setSensation] = useState(currentSensation?.sensation || null);
   const [intensity, setIntensity] = useState(currentSensation?.intensity || 3);
   
   const areaData = BODY_AREAS.find(a => a.id === area);
   const areaLabel = areaData?.label || 'Area';
+
+  const handleSensation = (id) => {
+    if (onTrackTap) onTrackTap();
+    if (sensation !== null && onTrackOptionChange) onTrackOptionChange(sensation, id);
+    else if (onTrackFirstInteraction) onTrackFirstInteraction();
+    setSensation(id);
+  };
+
+  const handleIntensity = (val) => {
+    if (onTrackTap) onTrackTap();
+    if (onTrackOptionChange) onTrackOptionChange(intensity, val);
+    setIntensity(val);
+  };
 
   return (
     <div className="flex-1 flex flex-col pt-2 overflow-y-auto no-scrollbar">
@@ -26,7 +39,7 @@ export function SensationStep({ area, currentSensation, onSave }) {
           return (
             <button
               key={s.id}
-              onClick={() => setSensation(s.id)}
+              onClick={() => handleSensation(s.id)}
               className="flex flex-col items-center justify-center p-4 rounded-[16px] transition-all"
               style={{ 
                 background: '#111118',
@@ -53,7 +66,7 @@ export function SensationStep({ area, currentSensation, onSave }) {
           {[1, 2, 3, 4, 5].map(val => (
             <button
               key={val}
-              onClick={() => setIntensity(val)}
+              onClick={() => handleIntensity(val)}
               className={`w-12 h-12 rounded-full font-bold text-lg flex items-center justify-center transition-all border-2 ${
                 intensity === val 
                   ? 'border-transparent text-white shadow-[0_0_20px_rgba(255,255,255,0.2)]' 

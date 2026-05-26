@@ -5,190 +5,291 @@ import { TeacherDock } from '../../components/TeacherDock';
 
 export function ClassAnalytics() {
   const navigate = useNavigate();
+  const [classDropdown, setClassDropdown] = useState(false);
+  const [selectedClass, setSelectedClass] = useState('Class 9A');
+  const [timeDropdown, setTimeDropdown] = useState(false);
+  const [selectedTime, setSelectedTime] = useState('This Week');
 
   return (
-    <section className="relative mx-auto flex min-h-[100dvh] w-full max-w-[440px] flex-col overflow-hidden bg-[#f5f5f5] font-sans pb-[100px]">
+    <section className="relative mx-auto flex min-h-[100dvh] w-full max-w-[440px] flex-col overflow-x-hidden bg-[#f8f9fb] font-sans pb-[100px]">
       
       {/* ───── Header ───── */}
-      <div className="flex items-center gap-3 px-6 pt-safe pt-8">
-        <div className="size-11 rounded-full bg-cover bg-center shadow-sm border border-gray-200" style={{ backgroundImage: 'url("https://i.pravatar.cc/150?img=47")' }} />
-        <div className="flex flex-col">
-          <h1 className="text-[17px] font-bold text-[#1f1f1f] leading-tight">Sarah</h1>
-          <p className="text-[11px] font-medium text-gray-500 mt-0.5">Grade 10-A</p>
-        </div>
-      </div>
-
-      {/* ───── Title & Back ───── */}
-      <div className="px-6 mt-6 flex items-center gap-3">
-        <button onClick={() => navigate(-1)} className="grid size-8 place-items-center rounded-full bg-[#7c3aed] text-white shadow-sm hover:opacity-90 transition">
-          <svg viewBox="0 0 24 24" className="h-4 w-4 pr-0.5" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
-        </button>
-        <h2 className="text-[16px] font-extrabold text-[#1f1f1f]">Classwide Analytics</h2>
-      </div>
-
-      {/* ───── Time Filter ───── */}
-      <div className="mx-6 mt-5 bg-[#333333] rounded-full p-1 flex items-center justify-between shadow-md">
-        <button className="flex-1 bg-white text-[#1f1f1f] text-[11px] font-bold py-2 rounded-full shadow-sm text-center">Daily</button>
-        <button className="flex-1 text-white/80 hover:text-white text-[11px] font-bold py-2 rounded-full text-center transition">Weekly</button>
-        <button className="flex-1 text-white/80 hover:text-white text-[11px] font-bold py-2 rounded-full text-center transition">Monthly</button>
-      </div>
-
-      {/* ───── Wellbeing Score Card ───── */}
-      <motion.div 
-        initial={{ opacity: 0, y: 15 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="mx-6 mt-5 rounded-[20px] bg-[#7c3aed] p-5 relative overflow-hidden shadow-[0_8px_20px_rgba(124,58,237,0.25)] h-[130px]"
-      >
-        {/* Superhero Illustration */}
-        <div className="absolute right-0 bottom-0 w-[150px] h-[130px] pointer-events-none flex items-end justify-end">
-          <svg viewBox="0 0 100 100" className="w-[120px] h-[100px] mb-2 mr-2" xmlns="http://www.w3.org/2000/svg">
-            {/* Ground / Clouds */}
-            <ellipse cx="50" cy="90" rx="35" ry="4" fill="#1f2937" opacity="0.3" />
-            <path d="M 10 80 Q 20 70 30 80 Q 40 75 50 85" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" opacity="0.8" />
-            <path d="M 70 70 Q 80 60 90 70" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" opacity="0.8" />
-            
-            {/* Cape */}
-            <path d="M 45 40 Q 20 50 25 80 Q 35 70 50 60 Z" fill="#facc15" />
-            
-            {/* Legs */}
-            <rect x="42" y="60" width="6" height="30" fill="#374151" />
-            <rect x="52" y="60" width="6" height="30" fill="#374151" />
-            
-            {/* Body */}
-            <path d="M 40 30 L 60 30 L 58 60 L 42 60 Z" fill="#f3f4f6" />
-            {/* Shirt details */}
-            <line x1="50" y1="30" x2="50" y2="60" stroke="#d1d5db" strokeWidth="1" />
-            
-            {/* Arms (hands on hips) */}
-            <path d="M 40 35 L 30 45 L 40 55" fill="none" stroke="#fca5a5" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M 60 35 L 70 45 L 60 55" fill="none" stroke="#fca5a5" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-            
-            {/* Head & Hair */}
-            <path d="M 42 20 Q 50 35 58 20 Q 50 5 42 20 Z" fill="#1f2937" />
-            <circle cx="50" cy="22" r="6" fill="#fca5a5" />
+      <div className="flex items-center justify-between px-6 pt-safe pt-8">
+        <h1 className="text-[20px] font-extrabold text-[#1f1f1f] leading-tight">Class Analytics</h1>
+        <button onClick={() => navigate('/teacher/alerts')} className="relative grid size-11 place-items-center rounded-full bg-[#7c3aed] text-white shadow-md shadow-purple-500/20 hover:bg-[#6d28d9] transition">
+          <svg viewBox="0 0 24 24" className="h-[22px] w-[22px]" fill="currentColor">
+            <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/>
           </svg>
+          <span className="absolute right-0 top-0 size-[12px] rounded-full bg-[#ef4444] border-[2.5px] border-[#f8f9fb]" />
+        </button>
+      </div>
+
+      {/* ───── Filters ───── */}
+      <div className="px-6 mt-4 flex items-start gap-3 relative z-40">
+        {/* Class Dropdown */}
+        <div className="relative">
+          <div onClick={() => { setClassDropdown(!classDropdown); setTimeDropdown(false); }} className="flex items-center justify-between bg-white px-3 py-1.5 rounded-[6px] border border-gray-200 shadow-sm min-w-[100px] cursor-pointer hover:bg-gray-50">
+            <span className="text-[11.5px] font-bold text-[#1f1f1f]">{selectedClass}</span>
+            <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 text-[#7c3aed] ml-2" fill="none" stroke="currentColor" strokeWidth="3"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          {classDropdown && (
+            <div className="absolute top-[110%] left-0 w-full min-w-max bg-white border border-gray-200 rounded-[6px] shadow-md py-1 z-50">
+              {['Class 9A', 'Class 9B', 'Class 9C', 'Class 9D', 'Class 9E', 'Class 9F'].map(cls => (
+                <div key={cls} onClick={() => { setSelectedClass(cls); setClassDropdown(false); }} className="px-3 py-1.5 text-[11.5px] font-bold text-[#1f1f1f] hover:bg-gray-50 cursor-pointer">
+                  {cls}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
-        <div className="relative z-10">
-          <p className="text-[12px] font-bold text-white">Wellbeing Score</p>
-          <h2 className="text-[44px] font-black text-[#facc15] leading-none mt-1 tracking-tighter">82%</h2>
-          {/* Progress Bar */}
-          <div className="mt-3 flex items-center h-[6px] w-[110px] bg-white rounded-full overflow-hidden">
-            <div className="h-full bg-[#facc15] w-[82%] rounded-full" />
+        {/* Time Dropdown */}
+        <div className="relative">
+          <div onClick={() => { setTimeDropdown(!timeDropdown); setClassDropdown(false); }} className="flex items-center justify-between bg-white px-3 py-1.5 rounded-[6px] border border-gray-200 shadow-sm min-w-[100px] cursor-pointer hover:bg-gray-50">
+            <span className="text-[11.5px] font-bold text-[#1f1f1f]">{selectedTime}</span>
+            <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 text-[#7c3aed] ml-2" fill="none" stroke="currentColor" strokeWidth="3"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          {timeDropdown && (
+            <div className="absolute top-[110%] left-0 w-full min-w-max bg-white border border-gray-200 rounded-[6px] shadow-md py-1 z-50">
+              {['This Week', 'This Month'].map(time => (
+                <div key={time} onClick={() => { setSelectedTime(time); setTimeDropdown(false); }} className="px-3 py-1.5 text-[11.5px] font-bold text-[#1f1f1f] hover:bg-gray-50 cursor-pointer">
+                  {time}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ───── Blue Score Card ───── */}
+      <motion.div 
+        initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
+        className="mx-6 mt-6 rounded-[20px] bg-[#005086] p-5 shadow-lg"
+      >
+        <div className="flex items-start justify-between">
+          {/* Left Side */}
+          <div>
+            <p className="text-[11px] font-bold text-white tracking-wide">Class 9A Wellness</p>
+            <div className="mt-1 flex items-baseline gap-1">
+              <span className="text-[36px] font-black text-white leading-none">78</span>
+              <span className="text-[14px] font-bold text-white/80">/100 Score</span>
+            </div>
+            <p className="text-[10px] font-semibold text-white/80 mt-4">32 students - Ms. Kavitha</p>
+          </div>
+          
+          {/* Right Side */}
+          <div className="text-right">
+            <p className="text-[11px] font-bold text-white tracking-wide">Class Rank</p>
+            <div className="mt-1">
+              <span className="text-[28px] font-black text-white leading-none">#2</span>
+            </div>
+            <p className="text-[10px] font-semibold text-white/80 mt-5">of 8 classes</p>
           </div>
         </div>
       </motion.div>
 
-      {/* ───── Balanced Chart ───── */}
+      {/* ───── Metric Cards ───── */}
+      <div className="mx-6 mt-4 grid grid-cols-2 gap-3">
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="bg-white rounded-[20px] p-4 shadow-sm border border-gray-100 flex flex-col justify-between">
+          <p className="text-[9.5px] font-extrabold text-gray-400 uppercase tracking-wider">PARTICIPATION</p>
+          <div className="mt-2">
+            <span className="text-[20px] font-black text-[#1f1f1f]">82%</span>
+          </div>
+          <div className="mt-3 w-fit bg-emerald-50 px-2 py-0.5 rounded flex items-center gap-1">
+            <svg viewBox="0 0 24 24" className="h-3 w-3 text-emerald-500" fill="none" stroke="currentColor" strokeWidth="3"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+            <span className="text-[10px] font-extrabold text-emerald-600">+8%</span>
+          </div>
+        </motion.div>
+
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="bg-white rounded-[20px] p-4 shadow-sm border border-gray-100 flex flex-col justify-between">
+          <p className="text-[9.5px] font-extrabold text-gray-400 uppercase tracking-wider">REFLECTION RATE</p>
+          <div className="mt-2">
+            <span className="text-[20px] font-black text-[#1f1f1f]">71%</span>
+          </div>
+          <div className="mt-3 w-fit bg-emerald-50 px-2 py-0.5 rounded flex items-center gap-1">
+            <svg viewBox="0 0 24 24" className="h-3 w-3 text-emerald-500" fill="none" stroke="currentColor" strokeWidth="3"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+            <span className="text-[10px] font-extrabold text-emerald-600">+3%</span>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* ───── Emotional Trend Bar Chart ───── */}
       <motion.div 
-        initial={{ opacity: 0, y: 15 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="mx-6 mt-4 bg-white rounded-[24px] p-5 shadow-[0_4px_16px_rgba(0,0,0,0.03)] border border-gray-100"
+        initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
+        className="mx-6 mt-4 bg-white rounded-[24px] p-5 shadow-sm border border-gray-100"
       >
-        <div className="flex items-center justify-between mb-2">
-          <h3 className="text-[18px] font-black text-[#1f1f1f]">Balanced</h3>
-          <span className="bg-[#333] text-white text-[8px] font-extrabold uppercase tracking-wider px-2 py-1 rounded-full">High Engagement</span>
-        </div>
+        <h3 className="text-[15px] font-bold text-[#1f1f1f] mb-6">Emotional Trend - Week</h3>
         
-        {/* Graph Area */}
-        <div className="relative h-[90px] w-full mt-4">
-          <svg viewBox="0 0 300 90" className="absolute top-0 left-0 w-full h-full overflow-visible" preserveAspectRatio="none">
-             {/* Dotted Purple Line */}
-             <path d="M 15 75 Q 60 80 105 55 T 195 65 T 285 40" fill="none" stroke="#7c3aed" strokeWidth="2.5" strokeDasharray="5 3.5" strokeLinecap="round" />
-             
-             {/* Solid Yellow Line */}
-             <path d="M 15 60 Q 40 40 60 55 T 105 65 T 150 15 T 195 55 T 240 105 T 285 40" fill="none" stroke="#facc15" strokeWidth="2.5" strokeLinecap="round" />
-             
-             {/* Data Points */}
-             {/* Purple Dot 1 at WED */}
-             <circle cx="105" cy="55" r="4.5" fill="#7c3aed" />
-             
-             {/* Yellow Dot at FRI */}
-             <circle cx="195" cy="55" r="4.5" fill="#facc15" />
-
-             {/* Purple Dot 2 at SAT */}
-             <circle cx="240" cy="76.25" r="4.5" fill="#7c3aed" />
-          </svg>
+        {/* Bars */}
+        <div className="flex items-end justify-between h-[100px] px-2">
+          <TrendBar day="Mon" val="65%" h="65%" color="bg-[#0284c7]" />
+          <TrendBar day="Tue" val="78%" h="78%" color="bg-[#10b981]" />
+          <TrendBar day="Wed" val="38%" h="38%" color="bg-[#0284c7]" />
+          <TrendBar day="Thu" val="73%" h="73%" color="bg-[#10b981]" />
+          <TrendBar day="Fri" val="50%" h="50%" color="bg-[#0284c7]" />
+          <TrendBar day="Sat" val="79%" h="79%" color="bg-[#10b981]" />
+          <TrendBar day="Sun" val="82%" h="82%" color="bg-[#10b981]" />
         </div>
 
-        {/* X Axis */}
-        <div className="flex justify-between mt-6 px-[10px] text-[9px] font-extrabold text-gray-400 relative z-10 pointer-events-none">
-           <span>MON</span><span>TUE</span><span>WED</span><span>THU</span><span>FRI</span><span>SAT</span><span>SUN</span>
+        {/* Legend */}
+        <div className="flex items-center gap-6 mt-6 px-2">
+          <div className="flex items-center gap-2">
+            <div className="size-2 bg-[#10b981]" />
+            <span className="text-[9.5px] font-extrabold text-gray-500">Positive mood</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="size-2 bg-[#0284c7]" />
+            <span className="text-[9.5px] font-extrabold text-gray-500">All Moods</span>
+          </div>
         </div>
       </motion.div>
 
-      {/* ───── Student Roster ───── */}
-      <div className="mx-6 mt-6">
+      {/* ───── Most Common Emotional State ───── */}
+      <motion.div 
+        initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
+        className="mx-6 mt-4 rounded-[20px] bg-[#e6f4ea] p-4 flex items-center gap-4"
+      >
+        <div className="text-[38px] leading-none pb-1">😌</div>
+        <div className="flex flex-col">
+          <p className="text-[9px] font-extrabold text-[#0d9488] uppercase tracking-wide">Most Common Emotional State</p>
+          <p className="text-[15px] font-extrabold text-[#1f1f1f] mt-0.5">Calm & Focused</p>
+          <p className="text-[10px] font-bold text-[#0d9488] mt-1">Reported by 43% of Class 9A students this week</p>
+        </div>
+      </motion.div>
+
+      {/* ───── Needs Attention ───── */}
+      <motion.div 
+        initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}
+        className="mx-6 mt-6"
+      >
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-[15px] font-bold text-[#1f1f1f]">Student Roster</h3>
-          <button className="text-[9px] font-extrabold uppercase text-gray-400 tracking-wider hover:text-gray-600 transition">SORT BY TREND</button>
+          <h3 className="text-[16px] font-bold text-[#1f1f1f]">Needs Attention</h3>
+          <span className="text-[11px] font-extrabold text-[#ef4444]">3 Students</span>
         </div>
         
         <div className="flex flex-col gap-3">
-          <RosterRow name="Sarah Jenkins" status="Calm and Focused • 2hrs ago" trend="up" img="68" />
-          <RosterRow name="Jenkins Sarah" status="Calm and Focused • 2hrs ago" trend="up" img="44" />
-          <RosterRow name="bheemaiah" status="Calm and Focused • 2hrs ago" trend="down" img="32" />
-          <RosterRow name="Kamesh" status="Calm and Focused • 2hrs ago" trend="down" img="26" />
+          <AttentionRow 
+            icon={<WarningIcon color="#ef4444" />}
+            iconBg="bg-[#fef2f2]"
+            name="Rohan Sharma"
+            desc="Stress trend - 3-day streak"
+            tag="High"
+            tagColor="text-[#ef4444]"
+            tagBg="bg-[#fef2f2]"
+          />
+          <AttentionRow 
+            icon={<PauseIcon color="#eab308" />}
+            iconBg="bg-[#fefce8]"
+            name="Preethi Kumar"
+            desc="Reflection drop - 5 days"
+            tag="Medium"
+            tagColor="text-[#eab308]"
+            tagBg="bg-[#fefce8]"
+          />
+          <AttentionRow 
+            icon={<WarningIcon color="#ef4444" />}
+            iconBg="bg-[#fef2f2]"
+            name="Arjun Verma"
+            desc="Low participation - 2 weeks"
+            tag="Medium"
+            tagColor="text-[#eab308]"
+            tagBg="bg-[#fefce8]"
+          />
         </div>
-      </div>
+      </motion.div>
 
-      {/* ───── Smart Insight ───── */}
-      <div className="mx-6 mt-6 bg-white rounded-[20px] p-5 shadow-[0_4px_16px_rgba(0,0,0,0.03)] border border-gray-100">
-        <div className="flex items-center gap-2 mb-3">
-          <span className="text-[18px]">💡</span>
-          <h3 className="text-[14px] font-bold text-[#1f1f1f]">Smart Insight</h3>
+      {/* ───── Reflection Consistency ───── */}
+      <motion.div 
+        initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
+        className="mx-6 mt-6 bg-white rounded-[24px] p-5 shadow-sm border border-gray-100"
+      >
+        <h3 className="text-[16px] font-bold text-[#1f1f1f] mb-5">Reflection Consistency</h3>
+        
+        <div className="flex flex-col gap-4">
+          <ProgressRow dotColor="#0284c7" label="Daily check-ins" val="72%" w="w-[72%]" barColor="bg-[#0284c7]" />
+          <ProgressRow dotColor="#eab308" label="Mood logs" val="81%" w="w-[81%]" barColor="bg-[#eab308]" />
+          <ProgressRow dotColor="#10b981" label="Gratitude journal" val="52%" w="w-[52%]" barColor="bg-[#10b981]" />
+          <ProgressRow dotColor="#d946ef" label="Session notes" val="38%" w="w-[38%]" barColor="bg-[#d946ef]" />
         </div>
-        <p className="text-[11.5px] text-gray-500 font-medium leading-relaxed">
-          Energy if 15 % higher today than Tuesday. Students seem more focused after the morning break
-        </p>
-      </div>
+      </motion.div>
 
-      {/* ───── Suggested Interventions ───── */}
-      <div className="mx-6 mt-6 flex-1">
-        <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-3">Suggested Interventions</h3>
-        <div className="flex flex-col gap-3">
-           <button className="w-fit bg-white rounded-full px-5 py-2.5 shadow-[0_2px_8px_rgba(0,0,0,0.04)] border border-gray-100 flex items-center gap-2 text-[12.5px] font-bold text-[#1f1f1f] hover:bg-gray-50 transition">
-             <span>💡</span> 5-mins grounding activity
-           </button>
-           <button className="w-fit bg-white rounded-full px-5 py-2.5 shadow-[0_2px_8px_rgba(0,0,0,0.04)] border border-gray-100 flex items-center gap-2 text-[12.5px] font-bold text-[#1f1f1f] hover:bg-gray-50 transition">
-             <span>💡</span> Schedule a breather
-           </button>
-        </div>
-      </div>
+      {/* ───── Participation Tracking Button ───── */}
+      <motion.div
+        initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45 }}
+        className="mx-6 mt-6"
+      >
+        <button
+          onClick={() => navigate('/teacher/participation')}
+          className="w-full py-4 rounded-[12px] bg-[#0284c7] text-white text-[16px] font-bold shadow-sm hover:bg-[#0369a1] transition flex items-center justify-center gap-2"
+        >
+          Participation Tracking <span className="text-[18px] leading-none mb-[2px]">→</span>
+        </button>
+      </motion.div>
 
-      {/* Custom Bottom Nav Dock */}
-      <TeacherDock />
-
+      <TeacherDock active="analytics" />
     </section>
   );
 }
 
-function RosterRow({ name, status, trend, img }) {
+function TrendBar({ day, val, h, color }) {
   return (
-    <div className="w-full bg-white rounded-[16px] p-3 flex items-center justify-between border border-gray-100 shadow-[0_2px_8px_rgba(0,0,0,0.03)] cursor-pointer hover:bg-gray-50 transition">
+    <div className="flex flex-col items-center gap-1.5 h-full justify-end">
+      <span className="text-[8.5px] font-bold text-gray-500">{val}</span>
+      <div className={`w-[14px] ${color} rounded-t-[4px]`} style={{ height: h }} />
+      <span className="text-[10px] font-bold text-[#1f1f1f] mt-1">{day}</span>
+    </div>
+  );
+}
+
+function AttentionRow({ icon, iconBg, name, desc, tag, tagBg, tagColor }) {
+  return (
+    <div className="w-full bg-white rounded-[16px] p-4 flex items-center justify-between shadow-sm border border-gray-100">
       <div className="flex items-center gap-3">
-        <div className="size-[42px] rounded-full bg-cover bg-center border border-gray-100" style={{ backgroundImage: `url("https://i.pravatar.cc/150?img=${img}")` }} />
-        <div className="flex flex-col gap-0.5">
-          <span className="text-[13.5px] font-bold text-[#1f1f1f]">{name}</span>
-          <span className="text-[10px] font-medium text-gray-400">{status}</span>
+        <div className={`grid size-8 place-items-center rounded-lg ${iconBg} shrink-0`}>
+          {icon}
+        </div>
+        <div className="flex flex-col">
+          <h4 className="text-[12.5px] font-extrabold text-[#1f1f1f]">{name}</h4>
+          <p className="text-[10px] font-semibold text-gray-400 mt-0.5">{desc}</p>
         </div>
       </div>
-      
-      {/* Trendline Icon */}
-      <div className="pr-2">
-        {trend === 'up' ? (
-          <svg viewBox="0 0 24 24" className="w-[18px] h-[18px] text-[#10b981]" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
-            <polyline points="17 6 23 6 23 12" />
-          </svg>
-        ) : (
-          <svg viewBox="0 0 24 24" className="w-[18px] h-[18px] text-[#f43f5e]" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6" />
-            <polyline points="17 18 23 18 23 12" />
-          </svg>
-        )}
+      <div className={`px-2.5 py-1 rounded-full ${tagBg}`}>
+        <span className={`text-[9px] font-extrabold ${tagColor}`}>{tag}</span>
       </div>
     </div>
+  );
+}
+
+function ProgressRow({ dotColor, label, val, w, barColor }) {
+  return (
+    <div className="flex items-center justify-between w-full">
+      <div className="flex items-center gap-2 w-[120px]">
+        <span className="size-2 rounded-full" style={{ backgroundColor: dotColor }} />
+        <span className="text-[10.5px] font-semibold text-[#1f1f1f]">{label}</span>
+      </div>
+      <div className="flex-1 h-2 bg-gray-200 rounded-full mx-3 overflow-hidden">
+        <div className={`h-full ${w} rounded-full ${barColor}`} />
+      </div>
+      <span className="text-[10.5px] font-extrabold text-gray-500 w-[24px] text-right">{val}</span>
+    </div>
+  );
+}
+
+function WarningIcon({ color }) {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+      <line x1="12" y1="9" x2="12" y2="13" />
+      <line x1="12" y1="17" x2="12.01" y2="17" />
+    </svg>
+  );
+}
+
+function PauseIcon({ color }) {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="6" y="4" width="4" height="16" />
+      <rect x="14" y="4" width="4" height="16" />
+    </svg>
   );
 }

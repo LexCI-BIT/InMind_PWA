@@ -1,158 +1,372 @@
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { TeacherDock } from '../../components/TeacherDock';
 
 export function TeacherProfile() {
   const navigate = useNavigate();
 
+  // Toggle states for notification settings
+  const [emotionalAlerts, setEmotionalAlerts] = useState(true);
+  const [weeklySummaries, setWeeklySummaries] = useState(true);
+  const [parentReports, setParentReports] = useState(false);
+  const [aiRecommendations, setAiRecommendations] = useState(true);
+  const [burnoutDetection, setBurnoutDetection] = useState(true);
+  const [studentRiskAlerts, setStudentRiskAlerts] = useState(true);
+
+  // Personalization toggles
+  const [darkMode, setDarkMode] = useState(false);
+  const [aiPersonalization, setAiPersonalization] = useState(true);
+
   return (
-    <section className="relative mx-auto flex min-h-[100dvh] w-full max-w-[440px] flex-col overflow-hidden bg-[#f5f5f5] font-sans pb-[90px]">
-      
-      {/* ───── Header ───── */}
-      <div className="flex items-center justify-center relative px-6 pt-safe pt-8 pb-4">
-        <button onClick={() => navigate(-1)} className="absolute left-6 top-safe mt-8 text-[#7c3aed] hover:opacity-80 transition">
-          <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
-        </button>
-        <h1 className="text-[17px] font-extrabold text-[#1f1f1f]">Teacher Profile</h1>
+    <section className="relative mx-auto flex min-h-[100dvh] w-full max-w-[440px] flex-col bg-[#f7f8fa] font-sans pb-[120px]">
+
+      {/* Decorative top curve */}
+      <div className="absolute top-0 left-0 right-0 h-[160px] bg-white rounded-b-[40px]" />
+
+      <div className="relative z-10 px-5 pt-safe pt-8">
+
+        {/* ═══════ Profile Header ═══════ */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-white rounded-[28px] px-6 py-7 shadow-sm border border-gray-100/60"
+        >
+          <div className="flex items-start gap-4">
+            {/* Avatar */}
+            <div className="relative shrink-0">
+              <div
+                className="w-[60px] h-[60px] rounded-full bg-cover bg-center border-2 border-white shadow-md"
+                style={{ backgroundImage: 'url("https://i.pravatar.cc/150?img=47")' }}
+              />
+              <div className="absolute bottom-0 right-0 w-4 h-4 bg-emerald-400 rounded-full border-[2.5px] border-white" />
+            </div>
+
+            {/* Name + Info */}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2">
+                <h1 className="text-[20px] font-extrabold text-gray-900 leading-tight">Sarah Johnson</h1>
+                <button className="shrink-0 px-3 py-1 rounded-full border border-gray-300 text-[11px] font-bold text-gray-700 hover:bg-gray-50 transition">
+                  Edit Profile
+                </button>
+              </div>
+              <p className="text-[13px] font-semibold text-gray-500 mt-0.5">Biology Teacher</p>
+              <p className="text-[11px] text-gray-400 font-medium">Greenwood High School</p>
+            </div>
+          </div>
+
+          {/* Badges */}
+          <div className="flex items-center gap-2 mt-5">
+            <span className="px-3 py-1.5 rounded-full bg-emerald-50 text-[11px] font-bold text-emerald-600 border border-emerald-100">
+              Wellness 82
+            </span>
+            <span className="px-3 py-1.5 rounded-full bg-emerald-50 text-[11px] font-bold text-emerald-600 border border-emerald-100">
+              8 yrs exp
+            </span>
+            <span className="px-3 py-1.5 rounded-full bg-emerald-50 text-[11px] font-bold text-emerald-600 border border-emerald-100">
+              4 classes
+            </span>
+          </div>
+        </motion.div>
+
+        {/* ═══════ Quick Actions ═══════ */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.05 }}
+          className="grid grid-cols-2 gap-3 mt-5"
+        >
+          <button
+            onClick={() => navigate('/teacher/checkin-summary')}
+            className="bg-white rounded-[24px] py-6 flex flex-col items-center gap-3 shadow-sm border border-gray-100/60 hover:shadow-md transition"
+          >
+            <div className="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20 6L9 17l-5-5" />
+              </svg>
+            </div>
+            <span className="text-[14px] font-bold text-gray-800">Check-in</span>
+          </button>
+
+          <button
+            onClick={() => navigate('/teacher/create-quiz')}
+            className="bg-white rounded-[24px] py-6 flex flex-col items-center gap-3 shadow-sm border border-gray-100/60 hover:shadow-md transition"
+          >
+            <div className="w-14 h-14 rounded-2xl bg-amber-50 flex items-center justify-center">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="#f59e0b" stroke="none">
+                <path d="M13 3L4 14h7l-2 7 9-11h-7l2-7z" />
+              </svg>
+            </div>
+            <span className="text-[14px] font-bold text-gray-800">Start Quiz</span>
+          </button>
+        </motion.div>
+
+        {/* ═══════ Classroom Analytics ═══════ */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+        >
+          <h2 className="text-[18px] font-extrabold text-gray-900 mt-8 mb-4">Classroom Analytics</h2>
+
+          {/* Two metric cards */}
+          <div className="grid grid-cols-2 gap-3">
+            <div className="bg-white rounded-[20px] p-5 shadow-sm border border-gray-100/60">
+              <p className="text-[9px] font-extrabold text-gray-400 uppercase tracking-[0.08em]">Student Participation</p>
+              <p className="text-[28px] font-black text-gray-900 mt-1 leading-none">79%</p>
+              {/* Mini bar chart */}
+              <div className="flex items-end gap-[3px] mt-3 h-[24px]">
+                <div className="w-[6px] rounded-sm bg-indigo-500" style={{ height: '60%' }} />
+                <div className="w-[6px] rounded-sm bg-indigo-500" style={{ height: '80%' }} />
+                <div className="w-[6px] rounded-sm bg-emerald-400" style={{ height: '45%' }} />
+                <div className="w-[6px] rounded-sm bg-emerald-400" style={{ height: '100%' }} />
+                <div className="w-[6px] rounded-sm bg-emerald-400" style={{ height: '70%' }} />
+              </div>
+              <div className="mt-2 inline-flex px-2 py-0.5 rounded bg-emerald-50 text-[9px] font-bold text-emerald-600">
+                +4%
+              </div>
+            </div>
+
+            <div className="bg-white rounded-[20px] p-5 shadow-sm border border-gray-100/60">
+              <p className="text-[9px] font-extrabold text-gray-400 uppercase tracking-[0.08em]">Class Engagement</p>
+              <p className="text-[28px] font-black text-gray-900 mt-1 leading-none">84%</p>
+              <div className="flex items-end gap-[3px] mt-3 h-[24px]">
+                <div className="w-[6px] rounded-sm bg-indigo-400" style={{ height: '50%' }} />
+                <div className="w-[6px] rounded-sm bg-indigo-500" style={{ height: '75%' }} />
+                <div className="w-[6px] rounded-sm bg-indigo-500" style={{ height: '60%' }} />
+                <div className="w-[6px] rounded-sm bg-emerald-400" style={{ height: '90%' }} />
+                <div className="w-[6px] rounded-sm bg-emerald-400" style={{ height: '100%' }} />
+              </div>
+              <div className="mt-2 inline-flex px-2 py-0.5 rounded bg-emerald-50 text-[9px] font-bold text-emerald-600">
+                +7%
+              </div>
+            </div>
+          </div>
+
+          {/* Progress bars card */}
+          <div className="bg-white rounded-[24px] p-6 shadow-sm border border-gray-100/60 mt-4">
+            <AnalyticsBar label="Emotional Wellness Score" percent="85%" color="bg-emerald-400" />
+            <AnalyticsBar label="Reflection consistency" percent="62%" color="bg-indigo-500" />
+            <AnalyticsBar label="Quiz completion rate" percent="74%" color="bg-amber-400" />
+            <AnalyticsBar label="Classroom stability index" percent="48%" color="bg-pink-500" />
+          </div>
+        </motion.div>
+
+        {/* ═══════ Classes Managed ═══════ */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+        >
+          <h2 className="text-[18px] font-extrabold text-gray-900 mt-8 mb-4">Classes Managed</h2>
+
+          <div className="bg-white rounded-[24px] px-6 py-5 shadow-sm border border-gray-100/60 flex flex-col gap-6">
+            {/* Grade 10A */}
+            <div>
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-[15px] font-extrabold text-gray-900">Grade 10A</h3>
+                  <p className="text-[11px] text-gray-400 font-medium">32 students</p>
+                </div>
+                <span className="px-2.5 py-1 rounded-full bg-emerald-50 text-[10px] font-bold text-emerald-500 border border-emerald-100">
+                  Stable
+                </span>
+              </div>
+              <div className="flex items-center gap-3 mt-3">
+                <span className="text-[11px] font-semibold text-gray-500 shrink-0">Participation</span>
+                <div className="flex-1 h-[6px] bg-gray-100 rounded-full overflow-hidden">
+                  <div className="h-full bg-rose-400 rounded-full" style={{ width: '82%' }} />
+                </div>
+                <span className="text-[12px] font-bold text-gray-700 shrink-0">82%</span>
+              </div>
+            </div>
+
+            {/* Divider */}
+            <div className="h-px bg-gray-100" />
+
+            {/* Biology Advanced */}
+            <div>
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-[15px] font-extrabold text-gray-900">Biology Advanced</h3>
+                  <p className="text-[11px] text-gray-400 font-medium">16 students</p>
+                </div>
+                <span className="px-2.5 py-1 rounded-full bg-emerald-50 text-[10px] font-bold text-emerald-500 border border-emerald-100">
+                  Stable
+                </span>
+              </div>
+              <div className="flex items-center gap-3 mt-3">
+                <span className="text-[11px] font-semibold text-gray-500 shrink-0">Participation</span>
+                <div className="flex-1 h-[6px] bg-gray-100 rounded-full overflow-hidden">
+                  <div className="h-full bg-indigo-500 rounded-full" style={{ width: '91%' }} />
+                </div>
+                <span className="text-[12px] font-bold text-gray-700 shrink-0">91%</span>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* ═══════ Notification Settings ═══════ */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <h2 className="text-[18px] font-extrabold text-gray-900 mt-8 mb-4">Notification Settings</h2>
+
+          <div className="bg-white rounded-[24px] shadow-sm border border-gray-100/60 overflow-hidden">
+            <NotifRow
+              iconColor="bg-rose-100"
+              title="Emotional alerts"
+              sub="Stress spikes & mood drops"
+              checked={emotionalAlerts}
+              onChange={() => setEmotionalAlerts(!emotionalAlerts)}
+            />
+            <NotifRow
+              iconColor="bg-indigo-100"
+              title="Weekly summaries"
+              sub="Class & student reports"
+              checked={weeklySummaries}
+              onChange={() => setWeeklySummaries(!weeklySummaries)}
+            />
+            <NotifRow
+              iconColor="bg-gray-100"
+              title="Parent reports"
+              sub="Auto-generated summaries"
+              checked={parentReports}
+              onChange={() => setParentReports(!parentReports)}
+            />
+            <NotifRow
+              iconColor="bg-emerald-100"
+              title="AI recommendations"
+              sub="Personalized insights"
+              checked={aiRecommendations}
+              onChange={() => setAiRecommendations(!aiRecommendations)}
+            />
+            <NotifRow
+              iconColor="bg-amber-100"
+              title="Burnout detection"
+              sub="Early warning system"
+              checked={burnoutDetection}
+              onChange={() => setBurnoutDetection(!burnoutDetection)}
+            />
+            <NotifRow
+              iconColor="bg-rose-100"
+              title="Student risk alerts"
+              sub="Flagged for attention"
+              checked={studentRiskAlerts}
+              onChange={() => setStudentRiskAlerts(!studentRiskAlerts)}
+              last
+            />
+          </div>
+        </motion.div>
+
+        {/* ═══════ Personalization ═══════ */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.25 }}
+        >
+          <h2 className="text-[18px] font-extrabold text-gray-900 mt-8 mb-4">Personalization</h2>
+
+          <div className="bg-white rounded-[24px] shadow-sm border border-gray-100/60 overflow-hidden">
+            <PersonRow label="Dark mode" right={<Toggle checked={darkMode} onChange={() => setDarkMode(!darkMode)} />} />
+            <PersonRow label="Language" right={<span className="text-[13px] font-semibold text-gray-400">English</span>} />
+            <PersonRow label="Export reports" />
+            <PersonRow label="AI personalization" right={<Toggle checked={aiPersonalization} onChange={() => setAiPersonalization(!aiPersonalization)} />} />
+            <PersonRow label="Accessibility" last />
+          </div>
+        </motion.div>
+
+        {/* ═══════ Account & Privacy ═══════ */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          <h2 className="text-[18px] font-extrabold text-gray-900 mt-8 mb-4">Account & privacy</h2>
+
+          <div className="bg-white rounded-[24px] shadow-sm border border-gray-100/60 overflow-hidden">
+            <PersonRow label="Privacy policy" />
+            <PersonRow label="Student safety" />
+            <PersonRow label="Data protection" />
+            <PersonRow label="Reset password" />
+            <div className="px-6 py-4">
+              <button
+                onClick={() => navigate('/role')}
+                className="text-[14px] font-semibold text-rose-500 hover:text-rose-600 transition"
+              >
+                Log out
+              </button>
+            </div>
+          </div>
+        </motion.div>
+
       </div>
 
-      <div className="px-6 flex flex-col gap-4">
-        
-        {/* ───── ID Card ───── */}
-        <div className="w-full bg-[#6366f1] rounded-[16px] p-5 relative overflow-hidden shadow-md">
-          {/* Illustration */}
-          <div className="absolute right-0 bottom-0 w-[140px] h-[120px] pointer-events-none">
-            <svg viewBox="0 0 100 100" className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-              {/* Desk */}
-              <rect x="20" y="85" width="80" height="3" fill="#fbbf24" />
-              <rect x="70" y="75" width="25" height="10" fill="#eab308" />
-              <rect x="72" y="70" width="20" height="5" fill="#fde047" />
-              {/* Student (Boy) */}
-              <path d="M 25 85 L 25 60 Q 30 50 40 50 Q 50 50 55 60 L 55 85 Z" fill="#fde047" /> {/* Yellow shirt */}
-              <path d="M 35 35 Q 40 28 45 35 L 45 45 Q 40 50 35 45 Z" fill="#1f2937" /> {/* Hair */}
-              <circle cx="40" cy="45" r="8" fill="#fca5a5" /> {/* Face */}
-              <path d="M 33 45 Q 40 55 47 45 Z" fill="#fca5a5" /> {/* Chin/Neck */}
-              {/* Student Glasses */}
-              <circle cx="37" cy="45" r="2.5" fill="none" stroke="#1f2937" strokeWidth="1" />
-              <circle cx="43" cy="45" r="2.5" fill="none" stroke="#1f2937" strokeWidth="1" />
-              <path d="M 39.5 45 L 40.5 45" stroke="#1f2937" strokeWidth="1" />
-              {/* Student Hand Writing */}
-              <path d="M 45 65 L 55 80 L 60 80" fill="none" stroke="#fca5a5" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
-              <line x1="60" y1="80" x2="65" y2="85" stroke="#1f2937" strokeWidth="1.5" strokeLinecap="round" /> {/* Pencil */}
-              {/* Teacher */}
-              <path d="M 65 95 L 65 45 Q 75 35 85 45 L 90 95 Z" fill="#eab308" /> {/* Yellow sweater */}
-              <circle cx="75" cy="30" r="10" fill="#713f12" /> {/* Dark skin face */}
-              <path d="M 65 25 Q 75 10 85 25 L 85 40 Q 75 45 65 40 Z" fill="#1f2937" /> {/* Dark Hair */}
-              {/* Teacher Hand/Arm */}
-              <path d="M 65 45 L 55 55 L 60 65" fill="none" stroke="#eab308" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
-              <circle cx="60" cy="65" r="3.5" fill="#713f12" /> {/* Dark hand */}
-              {/* Book */}
-              <path d="M 45 25 L 55 30 L 65 25 L 55 20 Z" fill="#ffffff" />
-              <path d="M 45 25 L 45 35 L 55 40 L 55 30 Z" fill="#f3f4f6" />
-              <path d="M 65 25 L 65 35 L 55 40 L 55 30 Z" fill="#e5e7eb" />
-              <line x1="48" y1="28" x2="52" y2="30" stroke="#9ca3af" strokeWidth="1" />
-              <line x1="58" y1="30" x2="62" y2="28" stroke="#9ca3af" strokeWidth="1" />
-              {/* Speech Bubble */}
-              <path d="M 65 15 Q 65 5 75 5 Q 85 5 85 15 Q 85 22 75 22 L 70 25 L 72 20 Q 65 18 65 15 Z" fill="#ffffff" />
-              <circle cx="70" cy="13" r="1" fill="#1f2937" />
-              <circle cx="75" cy="13" r="1" fill="#1f2937" />
-              <circle cx="80" cy="13" r="1" fill="#1f2937" />
-              {/* Clock */}
-              <circle cx="45" cy="15" r="7" fill="#ffffff" />
-              <line x1="45" y1="15" x2="45" y2="10" stroke="#1f2937" strokeWidth="1" />
-              <line x1="45" y1="15" x2="48" y2="15" stroke="#1f2937" strokeWidth="1" />
-            </svg>
-          </div>
-
-          <div className="relative z-10">
-            <div className="flex items-start gap-4">
-              <div className="relative">
-                <div className="size-[60px] rounded-full bg-cover bg-center border-2 border-white" style={{ backgroundImage: 'url("https://i.pravatar.cc/150?img=41")' }} />
-                <div className="absolute bottom-0 right-0 size-3.5 rounded-full bg-[#22c55e] border-2 border-[#6366f1]" />
-              </div>
-              <div className="flex flex-col gap-1 mt-1">
-                <h2 className="text-[18px] font-bold text-white leading-none">Jessica Alba</h2>
-                <span className="bg-white text-[#6366f1] text-[8px] font-extrabold px-2 py-0.5 rounded-full w-fit mt-0.5">4th Grade</span>
-              </div>
-            </div>
-            <div className="mt-6">
-              <span className="bg-white text-[#6366f1] text-[9px] font-extrabold px-3 py-1.5 rounded-full shadow-sm">Teacher ID : #950216</span>
-            </div>
-          </div>
-        </div>
-
-        {/* ───── Stats Grid ───── */}
-        <div className="grid grid-cols-2 gap-4">
-          
-          {/* Card 1: Journal Entries */}
-          <div className="bg-[#eab308] rounded-[20px] p-4 h-[140px] flex flex-col justify-between shadow-sm relative overflow-hidden">
-            <h3 className="text-[11px] font-bold text-white/90">Journal Entries</h3>
-            <span className="text-[48px] font-black text-white leading-none tracking-tight">43</span>
-            <div className="absolute bottom-3 right-3 size-[30px] bg-white rounded-full grid place-items-center text-[#eab308]">
-              <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
-            </div>
-          </div>
-
-          {/* Card 2: Participation Streak */}
-          <div className="bg-[#f97316] rounded-[20px] p-4 h-[140px] flex flex-col justify-between shadow-sm relative overflow-hidden">
-            <h3 className="text-[11px] font-bold text-white/90">Participation Streak</h3>
-            <div className="flex items-baseline gap-0.5">
-              <span className="text-[48px] font-black text-white leading-none tracking-tight">15</span>
-              <span className="text-[16px] font-bold text-white">Days</span>
-            </div>
-            <div className="absolute bottom-3 right-3 size-[30px] bg-white rounded-full grid place-items-center text-[#f97316]">
-              <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor"><path d="M17.66 11.2C17.43 10.9 17.15 10.64 16.89 10.38C16.22 9.78 15.46 9.35 14.82 8.72C13.33 7.26 13.07 4.8 14.56 3.18C14.71 3.01 14.61 2.76 14.39 2.72C13.78 2.62 13.14 2.72 12.57 2.97C11.51 3.43 10.59 4.24 10 5.25C8.89 7.15 9.17 9.8 10.82 11.41C11.06 11.64 11.3 11.85 11.53 12.08C11.66 12.21 11.75 12.39 11.74 12.58C11.73 12.82 11.55 13.03 11.31 13.06C11.02 13.1 10.74 12.98 10.53 12.78C10.06 12.34 9.68 11.8 9.36 11.23C9.22 10.98 8.84 10.97 8.68 11.2C7.38 13.05 7.42 15.68 8.79 17.49C9.84 18.89 11.6 19.64 13.36 19.46C15.4 19.26 17.22 17.84 17.87 15.89C18.25 14.77 18.2 13.52 17.66 12.3V12.3L17.66 11.2Z"/></svg>
-            </div>
-          </div>
-
-          {/* Card 3: Most Frequent Mood (Purple) */}
-          <div className="bg-[#7c3aed] rounded-[20px] p-4 h-[140px] flex flex-col justify-between shadow-sm relative overflow-hidden">
-            <h3 className="text-[11px] font-bold text-white/90">Most Frequent Mood</h3>
-            <span className="text-[32px] font-black text-white leading-none tracking-tight">CALM</span>
-            <div className="absolute bottom-3 right-3 size-[30px] bg-white rounded-full grid place-items-center text-[#7c3aed]">
-              <svg viewBox="0 0 24 24" className="h-[22px] w-[22px]" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.5 8c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5.67-1.5 1.5-1.5zm-7 0c.83 0 1.5.67 1.5 1.5S9.33 13 8.5 13 7 12.33 7 11.5 7.67 10 8.5 10zm3.5 8c-2.33 0-4.31-1.46-5.11-3.5h10.22c-.8 2.04-2.78 3.5-5.11 3.5z"/></svg>
-            </div>
-          </div>
-
-          {/* Card 4: Most Frequent Mood (Green) */}
-          <div className="bg-[#22c55e] rounded-[20px] p-4 h-[140px] flex flex-col justify-between shadow-sm relative overflow-hidden">
-            <h3 className="text-[11px] font-bold text-white/90">Most Frequent Mood</h3>
-            <span className="text-[32px] font-black text-white leading-none tracking-tight">CALM</span>
-            <div className="absolute bottom-3 right-3 size-[30px] bg-white rounded-full grid place-items-center text-[#22c55e]">
-              <svg viewBox="0 0 24 24" className="h-[22px] w-[22px]" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.5 8c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5.67-1.5 1.5-1.5zm-7 0c.83 0 1.5.67 1.5 1.5S9.33 13 8.5 13 7 12.33 7 11.5 7.67 10 8.5 10zm3.5 8c-2.33 0-4.31-1.46-5.11-3.5h10.22c-.8 2.04-2.78 3.5-5.11 3.5z"/></svg>
-            </div>
-          </div>
-
-        </div>
-
-        {/* ───── Warning Card ───── */}
-        <div className="mt-2 bg-[#fef3c7] rounded-[24px] p-4 border border-[#fde047] shadow-sm flex items-start gap-3">
-          <div className="grid size-8 place-items-center rounded-full bg-[#fcd34d] text-[#b45309] shrink-0">
-            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-          </div>
-          <div className="flex flex-col gap-1.5 pt-0.5">
-            <h3 className="text-[13px] font-bold text-[#1f1f1f]">Lower Energy This Week</h3>
-            <p className="text-[11.5px] font-medium text-gray-600 leading-snug">
-              Jessica has mentioned feeling "tired" 3 times in journals this week
-            </p>
-            <button className="mt-1 w-fit bg-[#eab308] text-white text-[10px] font-bold px-4 py-1.5 rounded-full shadow-sm hover:opacity-90 transition">
-              Check In
-            </button>
-          </div>
-        </div>
-
-        {/* ───── Encryption Footer ───── */}
-        <div className="mt-6 bg-[#f3f4f6] rounded-[24px] p-5 border border-dashed border-gray-300 flex flex-col items-center text-center gap-2">
-          <svg viewBox="0 0 24 24" className="h-5 w-5 text-[#22c55e]" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
-          <p className="text-[11px] font-medium text-gray-500 leading-relaxed px-2">
-            Your child's data is end-to-end encrypted. We never sell your data, and it's only used to support Jessica's wellbeing journey at Oakwood International
-          </p>
-        </div>
-
-      </div>
-
-      {/* Custom Bottom Nav Dock */}
-      <TeacherDock />
-
+      <TeacherDock active="profile" />
     </section>
+  );
+}
+
+/* ─── Analytics Progress Bar ─── */
+function AnalyticsBar({ label, percent, color }) {
+  return (
+    <div className="flex items-center gap-3 mb-3 last:mb-0">
+      <span className="text-[11px] font-semibold text-gray-600 w-[160px] shrink-0">{label}</span>
+      <div className="flex-1 h-[8px] bg-gray-100 rounded-full overflow-hidden">
+        <motion.div
+          initial={{ width: 0 }}
+          animate={{ width: percent }}
+          transition={{ duration: 1, ease: 'easeOut' }}
+          className={`h-full ${color} rounded-full`}
+        />
+      </div>
+    </div>
+  );
+}
+
+/* ─── Notification Row ─── */
+function NotifRow({ iconColor, title, sub, checked, onChange, last }) {
+  return (
+    <div className={`flex items-center gap-4 px-6 py-4 ${!last ? 'border-b border-gray-50' : ''}`}>
+      <div className={`w-9 h-9 rounded-xl ${iconColor} shrink-0`} />
+      <div className="flex-1 min-w-0">
+        <p className="text-[13px] font-bold text-gray-800">{title}</p>
+        <p className="text-[11px] text-gray-400 font-medium">{sub}</p>
+      </div>
+      <Toggle checked={checked} onChange={onChange} />
+    </div>
+  );
+}
+
+/* ─── Personalization Row ─── */
+function PersonRow({ label, right, last }) {
+  return (
+    <div className={`flex items-center justify-between px-6 py-4 ${!last ? 'border-b border-gray-50' : ''}`}>
+      <span className="text-[14px] font-semibold text-gray-700">{label}</span>
+      {right && right}
+    </div>
+  );
+}
+
+/* ─── Toggle Switch ─── */
+function Toggle({ checked, onChange }) {
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={checked}
+      onClick={onChange}
+      className={`relative inline-flex h-[28px] w-[50px] shrink-0 cursor-pointer rounded-full transition-colors duration-200 ease-in-out focus:outline-none ${
+        checked ? 'bg-indigo-500' : 'bg-gray-200'
+      }`}
+    >
+      <span
+        className={`pointer-events-none inline-block h-[24px] w-[24px] transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out ${
+          checked ? 'translate-x-[24px]' : 'translate-x-[2px]'
+        } mt-[2px]`}
+      />
+    </button>
   );
 }

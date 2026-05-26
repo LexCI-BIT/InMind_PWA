@@ -6,44 +6,91 @@ export function TeacherDock() {
   const path = location.pathname;
 
   // Paths mapping for active states
-  const isHome = path === '/teacher/home' || path === '/teacher/priority-students';
+  const isComparison = path === '/teacher/comparison' || path === '/teacher/sessions' || path === '/teacher/quiz' || path === '/teacher/create-quiz';
   const isAnalytics = path === '/teacher/analytics';
-  const isSessions = path === '/teacher/sessions' || path === '/teacher/quiz' || path === '/teacher/create-quiz';
+  const isHome = path === '/teacher/home' || path === '/teacher/priority-students' || path === '/teacher/alerts';
+  const isCheckIn = path === '/teacher/checkin-summary' || path === '/teacher/report';
   const isProfile = path === '/teacher/profile';
 
   return (
-    <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-3rem)] max-w-[380px] bg-[#2d2d2d] rounded-full p-[5px] flex items-center justify-between shadow-2xl">
-         {/* 1. Home */}
-         <button 
-           onClick={() => navigate('/teacher/home')} 
-           className={`grid size-[46px] place-items-center rounded-full transition-all duration-300 ${isHome ? 'bg-[#7c3aed] text-white shadow-md' : 'text-white/50 hover:text-white'}`}
-         >
-            <svg viewBox="0 0 24 24" className="h-[20px] w-[20px]" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-         </button>
+    <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2.5rem)] max-w-[400px] bg-black rounded-[32px] p-[6px] flex items-center justify-between shadow-2xl">
          
-         {/* 2. Analytics */}
-         <button 
-           onClick={() => navigate('/teacher/analytics')} 
-           className={`grid size-[46px] place-items-center rounded-full transition-all duration-300 ${isAnalytics ? 'bg-[#7c3aed] text-white shadow-md' : 'text-white/50 hover:text-white'}`}
-         >
-            <svg viewBox="0 0 24 24" className="h-[20px] w-[20px]" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="8" y1="12" x2="8" y2="16"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="16" y1="14" x2="16" y2="16"/></svg>
-         </button>
+         <NavItem 
+           isActive={isComparison} 
+           onClick={() => navigate('/teacher/comparison')}
+           icon={
+             <svg viewBox="0 0 24 24" className="w-[24px] h-[24px]" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+               <rect x="4" y="4" width="6.5" height="6.5" rx="1.5" />
+               <rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5" />
+               <rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5" />
+               <rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5" />
+             </svg>
+           }
+         />
 
-         {/* 3. Sessions (Grid) */}
-         <button 
-           onClick={() => navigate('/teacher/sessions')} 
-           className={`grid size-[46px] place-items-center rounded-full transition-all duration-300 ${isSessions ? 'bg-[#7c3aed] text-white shadow-md' : 'text-white/50 hover:text-white'}`}
-         >
-            <svg viewBox="0 0 24 24" className="h-[20px] w-[20px]" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>
-         </button>
+         <NavItem 
+           isActive={isAnalytics} 
+           onClick={() => navigate('/teacher/analytics')}
+           icon={
+             <svg viewBox="0 0 24 24" className="w-[24px] h-[24px]" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+               <line x1="4" y1="7" x2="16" y2="7" />
+               <line x1="4" y1="12" x2="16" y2="12" />
+               <line x1="4" y1="17" x2="10" y2="17" />
+               <path d="M13.5 21l6.5-6.5 2 2-6.5 6.5H13.5v-2z" strokeWidth="1.8" />
+             </svg>
+           }
+         />
 
-         {/* 4. Profile */}
-         <button 
-           onClick={() => navigate('/teacher/profile')} 
-           className={`grid size-[46px] place-items-center rounded-full transition-all duration-300 ${isProfile ? 'bg-[#7c3aed] text-white shadow-md' : 'text-white/50 hover:text-white'}`}
-         >
-            <svg viewBox="0 0 24 24" className="h-[20px] w-[20px]" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-         </button>
+         <NavItem 
+           isActive={isHome} 
+           onClick={() => navigate('/teacher/home')}
+           icon={
+             <svg viewBox="0 0 24 24" className="w-[26px] h-[26px]" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+               <path d="M4 10l8-7 8 7v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z" />
+               <line x1="12" y1="14" x2="12" y2="18" strokeWidth="2.5" />
+             </svg>
+           }
+         />
+
+         <NavItem 
+           isActive={isCheckIn} 
+           onClick={() => navigate('/teacher/report')}
+           icon={
+             <svg viewBox="0 0 24 24" className="w-[24px] h-[24px]" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+               <rect x="3" y="3" width="18" height="18" rx="2" />
+               <line x1="7" y1="16" x2="7" y2="12" strokeWidth="2" />
+               <line x1="12" y1="16" x2="12" y2="10" strokeWidth="2" />
+               <line x1="17" y1="16" x2="17" y2="6" strokeWidth="2" />
+             </svg>
+           }
+         />
+
+         <NavItem 
+           isActive={isProfile} 
+           onClick={() => navigate('/teacher/profile')}
+           icon={
+             <svg viewBox="0 0 24 24" className="w-[24px] h-[24px]" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+               <circle cx="12" cy="7.5" r="3.5" />
+               <ellipse cx="12" cy="18" rx="6.5" ry="2.5" />
+             </svg>
+           }
+         />
+         
       </div>
+  );
+}
+
+function NavItem({ isActive, onClick, icon }) {
+  return (
+    <button 
+      onClick={onClick} 
+      className={`grid place-items-center rounded-full transition-all duration-300 ${
+        isActive 
+          ? 'size-[54px] bg-[#8b5cf6] text-white shadow-lg scale-100' 
+          : 'size-[50px] text-white/50 hover:text-white/90 scale-95 hover:scale-100'
+      }`}
+    >
+      {icon}
+    </button>
   );
 }

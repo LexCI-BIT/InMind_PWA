@@ -345,6 +345,7 @@ export function StudentHome() {
 
           <motion.button
             type="button"
+            onClick={() => navigate('/student/day-task')}
             whileTap={{ scale: 0.97 }}
             className="mt-5 w-full rounded-full bg-violet-500 py-3.5 text-[15px] font-bold text-white shadow-md shadow-violet-500/25 transition hover:brightness-110"
           >

@@ -10,9 +10,9 @@ const ROLES = [
     title: 'Student',
     sub: 'Track your emotions & grow daily',
     Icon: GraduationIcon,
-    iconBg: 'bg-brand-purple-soft',
-    iconColor: 'text-brand-purple',
-    next: '/login',
+    iconBg: 'bg-[#ede9fe]',
+    iconColor: 'text-[#7c3aed]',
+    next: '/student/path-select',
   },
   {
     id: 'parent',
@@ -21,7 +21,7 @@ const ROLES = [
     Icon: TreeIcon,
     iconBg: 'bg-neutral-200',
     iconColor: 'text-neutral-700',
-    next: '/home',
+    next: '/parent/home',
   },
   {
     id: 'teacher',
@@ -30,7 +30,7 @@ const ROLES = [
     Icon: UserCardIcon,
     iconBg: 'bg-neutral-200',
     iconColor: 'text-neutral-700',
-    next: '/home',
+    next: '/teacher/home',
   },
 ];
 
@@ -39,8 +39,9 @@ export function RoleSelect() {
   const { setRole } = useRole();
   const [selected, setSelected] = useState('student');
 
-  const continueToPortal = () => {
-    const role = ROLES.find((r) => r.id === selected);
+  const handleRoleClick = (roleId) => {
+    setSelected(roleId);
+    const role = ROLES.find((r) => r.id === roleId);
     if (role) {
       setRole(role.id);
       navigate(role.next);
@@ -48,10 +49,10 @@ export function RoleSelect() {
   };
 
   return (
-    <Screen tone="light" className="!bg-brand-cream">
-      <div className="flex flex-1 flex-col px-6 pt-safe pt-16">
-        <h1 className="mt-6 text-center text-[28px] font-bold lowercase tracking-tight">
-          select role
+    <Screen tone="dark" className="bg-black">
+      <div className="flex flex-1 flex-col px-6 pt-safe pt-16 pb-10">
+        <h1 className="mt-12 text-center text-[28px] font-bold tracking-tight text-white">
+          Select role
         </h1>
 
         <div className="mt-10 flex flex-col gap-4">
@@ -61,20 +62,20 @@ export function RoleSelect() {
               <motion.button
                 key={id}
                 type="button"
-                onClick={() => setSelected(id)}
+                onClick={() => handleRoleClick(id)}
                 whileTap={{ scale: 0.98 }}
                 className={[
-                  'flex items-center gap-4 rounded-3xl border bg-white px-5 py-4 text-left shadow-sm transition',
+                  'flex items-center gap-4 rounded-3xl border-2 bg-white px-5 py-4 text-left shadow-sm transition',
                   isActive
-                    ? 'border-brand-purple shadow-brand-purple/10'
-                    : 'border-neutral-200/80',
+                    ? 'border-[#7c3aed]'
+                    : 'border-transparent',
                 ].join(' ')}
                 aria-pressed={isActive}
               >
                 <div
                   className={`grid size-12 shrink-0 place-items-center rounded-2xl ${
-                    isActive ? 'bg-brand-purple-soft' : iconBg
-                  } ${isActive ? 'text-brand-purple' : iconColor}`}
+                    isActive ? 'bg-[#ede9fe]' : iconBg
+                  } ${isActive ? 'text-[#7c3aed]' : iconColor}`}
                 >
                   <Icon />
                 </div>
@@ -87,15 +88,6 @@ export function RoleSelect() {
             );
           })}
         </div>
-
-        <motion.button
-          type="button"
-          onClick={continueToPortal}
-          whileTap={{ scale: 0.98 }}
-          className="mt-auto mb-safe mb-10 w-full rounded-full bg-brand-purple py-4 text-[17px] font-semibold text-white shadow-lg shadow-brand-purple/30 transition hover:brightness-110"
-        >
-          Continue
-        </motion.button>
       </div>
     </Screen>
   );
@@ -106,10 +98,10 @@ function Radio({ active }) {
     <span
       aria-hidden="true"
       className={`grid size-6 place-items-center rounded-full border-2 ${
-        active ? 'border-brand-purple' : 'border-neutral-300'
+        active ? 'border-[#7c3aed]' : 'border-neutral-300'
       }`}
     >
-      {active && <span className="size-3 rounded-full bg-brand-purple" />}
+      {active && <span className="size-3 rounded-full bg-[#7c3aed]" />}
     </span>
   );
 }

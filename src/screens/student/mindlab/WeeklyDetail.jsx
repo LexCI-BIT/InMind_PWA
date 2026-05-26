@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { WEEKS } from './weeklyData';
-import { DailyActivity } from './DailyActivity';
+import DynamicFlow from '../dynamicflow/DynamicFlow';
 
 /**
  * WeeklyDetail — shows a single week's 7-day card list.
@@ -48,7 +48,7 @@ export function WeeklyDetail() {
           transition={{ duration: 0.3 }}
           className="fixed inset-0 z-[100]"
         >
-          <DailyActivity
+          <DynamicFlow
             week={week}
             dayIndex={activeDayIdx}
             onBack={() => setActiveDayIdx(null)}

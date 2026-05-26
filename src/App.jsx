@@ -11,6 +11,7 @@ import { RoleSelect } from './screens/RoleSelect';
 
 // ─── Student (10 Main Routes) ───────────────────────────────
 import { StudentLogin } from './screens/student/Login';
+import { StudentSignUp } from './screens/student/SignUp';
 import { MoodCheck } from './screens/student/MoodCheck';
 import { StudentHome } from './screens/student/Home';
 import { Journal } from './screens/student/journal/Journal';
@@ -22,6 +23,7 @@ import { Workshop } from './screens/student/Workshop';
 import { Activities } from './screens/student/Activities';
 import { Insights } from './screens/student/Insights';
 import DailyCheckinFlow from './screens/student/checkin/DailyCheckinFlow';
+import DynamicFlow from './screens/student/dynamicflow/DynamicFlow';
 
 // ─── Student (Sub-routes — accessed from main routes) ───────
 import { MoodReason } from './screens/student/MoodReason';
@@ -41,6 +43,7 @@ import { ParentHome } from './screens/parent/Home';
 import { ParentAnnouncements } from './screens/parent/ParentAnnouncements';
 import { ParentInsights } from './screens/parent/ParentInsights';
 import { ParentProfile } from './screens/parent/ParentProfile';
+import { ParentSignUp } from './screens/parent/SignUp';
 
 // ─── Teacher ────────────────────────────────────────────────
 import { TeacherHome } from './screens/teacher/Home';
@@ -52,6 +55,10 @@ import { TeacherProfile } from './screens/teacher/TeacherProfile';
 import { PriorityStudents } from './screens/teacher/PriorityStudents';
 import { CheckInSummary } from './screens/teacher/CheckInSummary';
 import { AppreciationScreen } from './screens/teacher/AppreciationScreen';
+import { TeacherAlerts } from './screens/teacher/TeacherAlerts';
+import { TeacherReport } from './screens/teacher/TeacherReport';
+import { ClassComparison } from './screens/teacher/ClassComparison';
+import { ParticipationTracking } from './screens/teacher/ParticipationTracking';
 
 /* ─────────────────────────────────────────────────────────────
  *  Role-Aware Redirects
@@ -64,7 +71,7 @@ const HOME_MAP = {
 };
 
 const LOGIN_MAP = {
-  student: '/student/login',
+  student: '/student/home',
   parent: '/parent/home',
   teacher: '/teacher/home',
 };
@@ -106,6 +113,7 @@ function AnimatedRoutes() {
 
         {/* ─── Student: Auth ─── */}
         <Route path="/student/login" element={<StudentLogin />} />
+        <Route path="/student/signup" element={<StudentSignUp />} />
         <Route path="/student/path-select" element={<PathSelect />} />
 
         {/* ─── Student: 10 Main Routes ─── */}
@@ -114,6 +122,7 @@ function AnimatedRoutes() {
         <Route path="/student/insights" element={<Insights />} />
         <Route path="/student/mood" element={<MoodCheck />} />
         <Route path="/student/daily-checkin" element={<DailyCheckinFlow />} />
+        <Route path="/student/day-task" element={<DynamicFlow />} />
         <Route path="/student/journal" element={<Journal />} />
         <Route path="/student/quiz" element={<Quiz />} />
         <Route path="/student/share" element={<ShareThought />} />
@@ -135,6 +144,7 @@ function AnimatedRoutes() {
         <Route path="/student/notifications" element={<Notifications />} />
 
         {/* ─── Parent Routes ─── */}
+        <Route path="/parent/signup" element={<ParentSignUp />} />
         <Route path="/parent/home" element={<ParentHome />} />
         <Route path="/parent/announcements" element={<ParentAnnouncements />} />
         <Route path="/parent/insights" element={<ParentInsights />} />
@@ -150,6 +160,10 @@ function AnimatedRoutes() {
         <Route path="/teacher/priority-students" element={<PriorityStudents />} />
         <Route path="/teacher/checkin-summary" element={<CheckInSummary />} />
         <Route path="/teacher/appreciation" element={<AppreciationScreen />} />
+        <Route path="/teacher/alerts" element={<TeacherAlerts />} />
+        <Route path="/teacher/report" element={<TeacherReport />} />
+        <Route path="/teacher/comparison" element={<ClassComparison />} />
+        <Route path="/teacher/participation" element={<ParticipationTracking />} />
 
         {/* ─── Fallback ─── */}
         <Route path="*" element={<Navigate to="/" replace />} />
