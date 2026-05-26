@@ -31,8 +31,8 @@ import { getDailyFlowScreen, submitScreenResponse } from '../../../lib/api';
 
 const STEPS = [
   { id: 0, color: '#9d4edd', name: 'DailyContext' },
-  { id: 1, color: '#4361ee', name: 'Scenario' },
-  { id: 2, color: '#f59e0b', name: 'MicroFeedback' },
+  { id: 1, color: '#f59e0b', name: 'MicroFeedback' },
+  { id: 2, color: '#4361ee', name: 'Scenario' },
   { id: 3, color: '#e63946', name: 'Reflection' },
   { id: 4, color: '#2a9d8f', name: 'Insight' },
   { id: 5, color: '#a8dadc', name: 'Challenge' },
@@ -41,8 +41,8 @@ const STEPS = [
 
 const STEP_TO_SCREEN_TYPE = {
   0: 'context_warmup',
-  1: 'scenario',
-  2: 'daily_prompt',
+  1: 'daily_prompt',
+  2: 'scenario',
   3: 'reflection',
   4: 'insight',
   5: 'challenge',
@@ -149,11 +149,11 @@ export default function DynamicFlow({ week, dayIndex, onBack, onComplete }) {
       {/* ───── Background Image ───── */}
       <AnimatePresence mode="wait">
         {step === 0 && <BackgroundImage key="dailycontext" src="/dynamicflow/dailyprompt.png" />}
-        {step === 1 && <BackgroundImage key="scenario" src="/dynamicflow/senario.png" />}
-        {step === 2 && selection === 'friends' && <BackgroundImage key="friends" src="/dynamicflow/friends.png" />}
-        {step === 2 && selection === 'school' && <BackgroundImage key="school" src="/dynamicflow/school.png" />}
-        {step === 2 && selection === 'myself' && <BackgroundImage key="myself" src="/dynamicflow/myself.png" />}
-        {step === 2 && !selection && <BackgroundImage key="feedback" src="/dynamicflow/dailyprompt.png" />}
+        {step === 1 && selection === 'friends' && <BackgroundImage key="friends" src="/dynamicflow/friends.png" />}
+        {step === 1 && selection === 'school' && <BackgroundImage key="school" src="/dynamicflow/school.png" />}
+        {step === 1 && selection === 'myself' && <BackgroundImage key="myself" src="/dynamicflow/myself.png" />}
+        {step === 1 && !selection && <BackgroundImage key="feedback" src="/dynamicflow/dailyprompt.png" />}
+        {step === 2 && <BackgroundImage key="scenario" src="/dynamicflow/senario.png" />}
         {step === 3 && <BackgroundImage key="reflection" src="/dynamicflow/reflection.png" />}
         {step === 4 && <BackgroundImage key="insight" src="/dynamicflow/insight.png" />}
         {step === 5 && <BackgroundImage key="challenge" src="/dynamicflow/challenge.jpeg" />}
@@ -212,23 +212,9 @@ export default function DynamicFlow({ week, dayIndex, onBack, onComplete }) {
             </motion.div>
           )}
 
-          {/* Step 1: Scenario */}
+          {/* Step 1: MicroFeedback */}
           {step === 1 && (
             <motion.div key="1" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex-1 flex flex-col">
-              <ScenarioStep
-                onNext={(selectedOption) => {
-                  tracker.trackTap();
-                  tracker.trackFirstInteraction();
-                  handleStepSubmitAndNext({ selectedOption });
-                }}
-                data={content}
-              />
-            </motion.div>
-          )}
-
-          {/* Step 2: MicroFeedback */}
-          {step === 2 && (
-            <motion.div key="2" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex-1 flex flex-col">
               <MicroFeedbackStep
                 selection={selection}
                 onNext={(text) => {
@@ -236,6 +222,20 @@ export default function DynamicFlow({ week, dayIndex, onBack, onComplete }) {
                   handleStepSubmitAndNext({ text, selection });
                 }}
                 onTextChange={(text) => tracker.trackTextInput(text)}
+              />
+            </motion.div>
+          )}
+
+          {/* Step 2: Scenario */}
+          {step === 2 && (
+            <motion.div key="2" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex-1 flex flex-col">
+              <ScenarioStep
+                onNext={(selectedOption) => {
+                  tracker.trackTap();
+                  tracker.trackFirstInteraction();
+                  handleStepSubmitAndNext({ selectedOption });
+                }}
+                data={content}
               />
             </motion.div>
           )}
