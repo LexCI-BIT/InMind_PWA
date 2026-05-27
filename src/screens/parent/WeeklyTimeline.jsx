@@ -1,8 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { ParentDock } from '../../components/ParentDock';
 
 export function WeeklyTimeline() {
+  const navigate = useNavigate();
   const participationData = [
     { day: 'Mon', active: true, value: '100%' },
     { day: 'Tue', active: true, value: '90%' },
@@ -32,7 +34,10 @@ export function WeeklyTimeline() {
           <h1 className="text-[20px] font-bold text-[#1a1a1a] mb-0.5">Weekly Timeline</h1>
           <p className="text-[12px] font-medium text-gray-500">May 19 – 25, 2026</p>
         </div>
-        <button className="size-11 rounded-full bg-[#6366f1] grid place-items-center text-white shadow-md transition relative shrink-0">
+        <button 
+          onClick={() => navigate('/parent/insights')}
+          className="size-11 rounded-full bg-[#6366f1] grid place-items-center text-white shadow-md transition relative shrink-0"
+        >
           <svg viewBox="0 0 24 24" className="h-[22px] w-[22px]" fill="currentColor">
             <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
           </svg>

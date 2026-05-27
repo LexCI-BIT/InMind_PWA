@@ -1,7 +1,9 @@
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { ParentDock } from '../../components/ParentDock';
 
 export function AwarenessPanel() {
+  const navigate = useNavigate();
   const reflectionMeters = [
     { label: 'Empathy Expression', value: 78, color: 'bg-[#3b82f6]', textColor: 'text-[#3b82f6]' },
     { label: 'Interpersonal Growth', value: 65, color: 'bg-[#22c55e]', textColor: 'text-[#22c55e]' },
@@ -17,7 +19,10 @@ export function AwarenessPanel() {
           <h1 className="text-[20px] font-bold text-[#1a1a1a] mb-0.5">Awareness Panel</h1>
           <p className="text-[12px] font-medium text-gray-500">Social & self-awareness metrics</p>
         </div>
-        <button className="size-11 rounded-full bg-[#6366f1] grid place-items-center text-white shadow-md transition relative shrink-0">
+        <button 
+          onClick={() => navigate('/parent/insights')}
+          className="size-11 rounded-full bg-[#6366f1] grid place-items-center text-white shadow-md transition relative shrink-0"
+        >
           <svg viewBox="0 0 24 24" className="h-[22px] w-[22px]" fill="currentColor">
             <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
           </svg>
