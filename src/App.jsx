@@ -41,9 +41,11 @@ import { Notifications } from './screens/student/Notifications';
 // ─── Parent ─────────────────────────────────────────────────
 import { ParentHome } from './screens/parent/Home';
 import { ParentAnnouncements } from './screens/parent/ParentAnnouncements';
-import { ParentInsights } from './screens/parent/ParentInsights';
 import { ParentProfile } from './screens/parent/ParentProfile';
 import { ParentSignUp } from './screens/parent/SignUp';
+import { WeeklyTimeline } from './screens/parent/WeeklyTimeline';
+import { Challenges } from './screens/parent/Challenges';
+import { AwarenessPanel } from './screens/parent/AwarenessPanel';
 
 // ─── Teacher ────────────────────────────────────────────────
 import { TeacherHome } from './screens/teacher/Home';
@@ -146,8 +148,10 @@ function AnimatedRoutes() {
         {/* ─── Parent Routes ─── */}
         <Route path="/parent/signup" element={<ParentSignUp />} />
         <Route path="/parent/home" element={<ParentHome />} />
+        <Route path="/parent/weekly" element={<WeeklyTimeline />} />
+        <Route path="/parent/challenges" element={<Challenges />} />
+        <Route path="/parent/awareness" element={<AwarenessPanel />} />
         <Route path="/parent/announcements" element={<ParentAnnouncements />} />
-        <Route path="/parent/insights" element={<ParentInsights />} />
         <Route path="/parent/profile" element={<ParentProfile />} />
 
         {/* ─── Teacher Routes ─── */}
