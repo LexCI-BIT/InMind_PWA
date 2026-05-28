@@ -31,6 +31,7 @@ import { JournalEntry } from './screens/student/journal/JournalEntry';
 import { QuizComplete } from './screens/student/quiz/QuizComplete';
 import { MindLab } from './screens/student/mindlab/MindLab';
 import { WeekDetail } from './screens/student/mindlab/WeekDetail';
+import { Week1 } from './screens/student/mindlab/Week1';
 import { MindLabProgress } from './screens/student/mindlab/MindLabProgress';
 import { StudentProfile } from './screens/student/Profile';
 import { PathSelect } from './screens/student/PathSelect';
@@ -141,6 +142,7 @@ function AnimatedRoutes() {
         <Route path="/student/quiz/complete" element={<QuizComplete />} />
         <Route path="/student/mindlab" element={<MindLab />} />
         <Route path="/student/mindlab/week/:weekId" element={<WeekDetail />} />
+        <Route path="/student/mindlab/week1" element={<Week1 />} />
         <Route path="/student/mindlab/progress" element={<MindLabProgress />} />
         <Route path="/student/mindlab/weekly/:weekId" element={<WeeklyDetail />} />
         <Route path="/student/profile" element={<StudentProfile />} />
