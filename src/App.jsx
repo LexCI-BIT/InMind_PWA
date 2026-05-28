@@ -16,6 +16,7 @@ import { MoodCheck } from './screens/student/MoodCheck';
 import { StudentHome } from './screens/student/Home';
 import { Journal } from './screens/student/journal/Journal';
 import { Quiz } from './screens/student/quiz/Quiz';
+import { QuizList } from './screens/student/quiz/QuizList';
 import { ShareThought } from './screens/student/share/ShareThought';
 import { AudioSpace } from './screens/student/AudioSpace';
 import { DailyChallenges } from './screens/student/challenges/DailyChallenges';
@@ -128,7 +129,8 @@ function AnimatedRoutes() {
         <Route path="/student/daily-checkin" element={<DailyCheckinFlow />} />
         <Route path="/student/day-task" element={<DynamicFlow />} />
         <Route path="/student/journal" element={<Journal />} />
-        <Route path="/student/quiz" element={<Quiz />} />
+        <Route path="/student/quiz" element={<QuizList />} />
+        <Route path="/student/quiz/take" element={<Quiz />} />
         <Route path="/student/share" element={<ShareThought />} />
         <Route path="/student/audio" element={<AudioSpace />} />
         <Route path="/student/challenges" element={<DailyChallenges />} />
