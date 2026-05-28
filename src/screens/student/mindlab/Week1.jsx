@@ -74,10 +74,10 @@ export function Week1() {
             initial={{ opacity: 0, backdropFilter: 'blur(0px)' }}
             animate={{ opacity: 1, backdropFilter: 'blur(8px)' }}
             exit={{ opacity: 0, backdropFilter: 'blur(0px)' }}
-            className="absolute inset-0 z-50 bg-black/70 flex flex-col items-center pt-[12vh] px-6"
+            className="absolute inset-0 z-50 bg-black/80 flex flex-col pt-safe px-6 pb-8 overflow-y-auto"
           >
-            {/* Header Area Container (relative for X button positioning) */}
-            <div className="relative w-full flex flex-col items-center mb-8">
+            {/* Header Area Container */}
+            <div className="relative w-full flex flex-col items-center shrink-0 mt-6 mb-4">
               {/* Close button aligned with the title */}
               <button
                 onClick={() => setShowContent(false)}
@@ -91,23 +91,23 @@ export function Week1() {
 
               <div className="flex flex-col items-center drop-shadow-xl">
                 <h3
-                  className="text-[#e2c172] text-[22px] tracking-wide"
+                  className="text-[#e2c172] text-[20px] tracking-wide"
                   style={{ fontFamily: '"Baskerville", "Playfair Display", "Times New Roman", serif' }}
                 >
                   Week 1
                 </h3>
                 <h2
-                  className="text-white text-[34px] tracking-wide mt-[-2px]"
+                  className="text-white text-[30px] tracking-wide mt-[-4px]"
                   style={{ fontFamily: '"Baskerville", "Playfair Display", "Times New Roman", serif' }}
                 >
                   The Forest
                 </h2>
-                <div className="w-[80px] h-[2px] bg-[#e2c172] mt-4" />
+                <div className="w-[60px] h-[2px] bg-[#e2c172] mt-2" />
               </div>
             </div>
 
-            {/* Main Parchment Image (with unfolding animation) */}
-            <div style={{ perspective: 1200 }} className="w-full flex justify-center">
+            {/* Main Parchment Image Container - Allowed to keep natural size for scrolling */}
+            <div style={{ perspective: 1200 }} className="w-full flex justify-center py-6 shrink-0">
               <motion.img
                 src="/gamification/week1.png"
                 alt="Week 1 Content"
@@ -116,7 +116,7 @@ export function Week1() {
                 exit={{ rotateX: 80, scaleY: 0.3, scaleX: 0.8, opacity: 0, y: 40 }}
                 transition={{ duration: 0.8, type: 'spring', bounce: 0.4 }}
                 style={{ transformOrigin: 'top center' }}
-                className="w-[90%] max-w-[320px] h-auto object-contain drop-shadow-[0_15px_35px_rgba(0,0,0,0.85)] rounded-md"
+                className="w-full max-w-[320px] h-auto object-contain drop-shadow-[0_15px_35px_rgba(0,0,0,0.85)] rounded-md"
               />
             </div>
 
@@ -125,7 +125,7 @@ export function Week1() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.5 }}
-              className="mt-8 flex flex-col items-center text-center"
+              className="flex flex-col items-center text-center shrink-0 mb-8"
             >
               <p className="text-white/90 text-[14px] leading-snug font-medium tracking-wide drop-shadow-md">
                 Great your journey<br />
@@ -135,28 +135,28 @@ export function Week1() {
               <img
                 src="/gamification/forest_symbol.png"
                 alt="Forest Symbol"
-                className="w-[60px] h-[60px] mt-4 object-contain drop-shadow-lg"
+                className="w-[50px] h-[50px] mt-3 object-contain drop-shadow-lg"
               />
 
-              <p className="text-white text-[22px] tracking-wide mt-3 drop-shadow-md font-sans">
+              <p className="text-white text-[20px] tracking-wide mt-2 drop-shadow-md font-sans">
                 The Forest
               </p>
             </motion.div>
 
             {/* Start Button */}
-            <motion.button
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.5, duration: 0.4 }}
-              whileTap={{ scale: 0.96 }}
-              className="absolute bottom-8 w-[80%] max-w-[320px] bg-[#dfbd69] text-black text-[22px] py-3.5 rounded-xl shadow-[0_5px_15px_rgba(223,189,105,0.4)] transition hover:bg-[#e6ca83]"
-              style={{ fontFamily: '"Baskerville", "Playfair Display", "Times New Roman", serif' }}
-              onClick={() => {
-                navigate('/student/mindlab/weekly/1');
-              }}
-            >
-              Start Week 1
-            </motion.button>
+            <div className="flex justify-center shrink-0 w-full">
+              <motion.button
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.5, duration: 0.4 }}
+                whileTap={{ scale: 0.96 }}
+                className="w-full max-w-[320px] bg-[#dfbd69] text-black text-[22px] py-3.5 rounded-xl shadow-[0_5px_15px_rgba(223,189,105,0.4)] transition hover:bg-[#e6ca83]"
+                style={{ fontFamily: '"Baskerville", "Playfair Display", "Times New Roman", serif' }}
+                onClick={() => navigate('/student/mindlab/weekly/1')}
+              >
+                Start Week 1
+              </motion.button>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
