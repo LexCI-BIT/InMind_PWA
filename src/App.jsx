@@ -36,7 +36,12 @@ import { Week1 } from './screens/student/mindlab/Week1';
 import { MindLabProgress } from './screens/student/mindlab/MindLabProgress';
 import { StudentProfile } from './screens/student/Profile';
 import { PathSelect } from './screens/student/PathSelect';
-import { Academic } from './screens/student/Academic';
+import { Academic } from './screens/student/academic/Academic';
+import { ExamReference } from './screens/student/academic/exam-reference/ExamReference';
+import { ExpertMentors } from './screens/student/academic/mentor-support/ExpertMentors';
+import { MentorCategory } from './screens/student/academic/mentor-support/MentorCategory';
+import { MentorProfile } from './screens/student/academic/mentor-support/MentorProfile';
+import { MentorBookingFlow } from './screens/student/academic/mentor-support/MentorBookingFlow';
 import { WeeklyDetail } from './screens/student/mindlab/WeeklyDetail';
 import { Notifications } from './screens/student/Notifications';
 
@@ -124,6 +129,11 @@ function AnimatedRoutes() {
         {/* ─── Student: 10 Main Routes ─── */}
         <Route path="/student/home" element={<StudentHome />} />
         <Route path="/student/academic" element={<Academic />} />
+        <Route path="/student/academic/mentor" element={<ExpertMentors />} />
+        <Route path="/student/academic/mentor/:category" element={<MentorCategory />} />
+        <Route path="/student/academic/mentor/profile/:id" element={<MentorProfile />} />
+        <Route path="/student/academic/mentor/book/:id" element={<MentorBookingFlow />} />
+        <Route path="/student/academic/exam-reference" element={<ExamReference />} />
         <Route path="/student/insights" element={<Insights />} />
         <Route path="/student/mood" element={<MoodCheck />} />
         <Route path="/student/daily-checkin" element={<DailyCheckinFlow />} />
