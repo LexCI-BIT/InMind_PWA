@@ -3,10 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { WEEKS } from '../mindlab/weeklyData';
 
-import { DailyContextStep } from './DailyContextStep';
-import { ScenarioStep } from './ScenarioStep';
-import { MicroFeedbackStep } from './MicroFeedbackStep';
-import { ReflectionStep } from './ReflectionStep';
+import { MomentCardStep } from './MomentCardStep';
+import { ContextNarrowingStep } from './ContextNarrowingStep';
+import { MentalReplayStep } from './MentalReplayStep';
+import { StoryStartStep } from './StoryStartStep';
+import { ImmediateConsequenceStep } from './ImmediateConsequenceStep';
+import { WhatHappensNextStep } from './WhatHappensNextStep';
+import { HaveYouSeenBeforeStep } from './HaveYouSeenBeforeStep';
+import { OptionalReflectionStep } from './OptionalReflectionStep';
+import { BehaviourInsightStep } from './BehaviourInsightStep';
 import { InsightStep } from './InsightStep';
 import { ChallengeStep } from './ChallengeStep';
 import { CompletionStep } from './CompletionStep';
@@ -25,34 +30,45 @@ import { getDailyFlowScreen, submitScreenResponse } from '../../../lib/api';
 
 /**
  * ═══════════════════════════════════════════════════════════════════
- *  Dynamic Flow — 7 Steps
+ *  Dynamic Flow — 12 Steps (Partial Integration)
  * ═══════════════════════════════════════════════════════════════════
  */
 
+// Temporarily mixing new steps with old steps to keep flow working while we build
 const STEPS = [
-  { id: 0, color: '#9d4edd', name: 'DailyContext' },
-  { id: 1, color: '#f59e0b', name: 'MicroFeedback' },
-  { id: 2, color: '#4361ee', name: 'Scenario' },
-  { id: 3, color: '#e63946', name: 'Reflection' },
-  { id: 4, color: '#2a9d8f', name: 'Insight' },
-  { id: 5, color: '#a8dadc', name: 'Challenge' },
-  { id: 6, color: '#10b981', name: 'Completion' },
+  { id: 0, color: '#facc15', name: 'MomentCard' },
+  { id: 1, color: '#f59e0b', name: 'ContextNarrowing' },
+  { id: 2, color: '#10b981', name: 'MentalReplay' },
+  { id: 3, color: '#8b5cf6', name: 'StoryStart' },
+  { id: 4, color: '#ec4899', name: 'ImmediateConsequence' },
+  { id: 5, color: '#0ea5e9', name: 'WhatHappensNext' },
+  { id: 6, color: '#f59e0b', name: 'HaveYouSeenBefore' },
+  { id: 7, color: '#d1d5db', name: 'OptionalReflection' },
+  { id: 8, color: '#f59e0b', name: 'BehaviourInsight' },
+  { id: 9, color: '#a8dadc', name: 'Challenge' },
+  { id: 10, color: '#10b981', name: 'Completion' },
 ];
 
 const STEP_TO_SCREEN_TYPE = {
-  0: 'context_warmup',
-  1: 'daily_prompt',
-  2: 'scenario',
-  3: 'reflection',
-  4: 'insight',
-  5: 'challenge',
-  6: 'completion',
+  0: 'moment_card',
+  1: 'context_narrowing',
+  2: 'mental_replay',
+  3: 'story_start',
+  4: 'immediate_consequence',
+  5: 'what_happens_next',
+  6: 'have_you_seen_before',
+  7: 'optional_reflection',
+  8: 'behaviour_insight',
+  9: 'challenge',
+  10: 'completion',
 };
 
 export default function DynamicFlow({ week, dayIndex, onBack, onComplete }) {
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
-  const [selection, setSelection] = useState(null);
+  const [selection, setSelection] = useState(null); // 'friends', 'school', or 'myself'
+  const [narrowSelection, setNarrowSelection] = useState(null); // 'ignored', 'studies', etc.
+  const [storySelection, setStorySelection] = useState(null); // 'ask', 'wait', 'overthink', 'avoid'
 
   const activeWeek = week || WEEKS[0];
   const activeDayIndex = dayIndex !== undefined ? dayIndex : 3;
@@ -62,12 +78,10 @@ export default function DynamicFlow({ week, dayIndex, onBack, onComplete }) {
   const sessionRef = useRef(createSessionState('dynamic'));
   const allMetadataRef = useRef([]);
 
-  // Fetch active session from backend
   useEffect(() => {
     const initSession = async () => {
       try {
         const data = await getDailyFlowScreen();
-        // The backend should return the current session ID since step 6 was completed
         if (data && data.session_id) {
           sessionRef.current.active_session_id = data.session_id;
         }
@@ -90,7 +104,6 @@ export default function DynamicFlow({ week, dayIndex, onBack, onComplete }) {
     addStepMetadata('dynamic', metadata);
     updateResponse('dynamic', step, responseData);
 
-    // Send telemetry to backend
     if (sessionRef.current.active_session_id) {
       try {
         await submitScreenResponse({
@@ -109,8 +122,6 @@ export default function DynamicFlow({ week, dayIndex, onBack, onComplete }) {
 
   const completeFlow = useCallback(async () => {
     logSessionSummary('dynamic', sessionRef.current.active_session_id, allMetadataRef.current);
-    
-    // Call backend to mark as completed
     if (sessionRef.current.active_session_id) {
       try {
         await getDailyFlowScreen(sessionRef.current.active_session_id);
@@ -118,14 +129,13 @@ export default function DynamicFlow({ week, dayIndex, onBack, onComplete }) {
         console.error("Failed to complete dynamic flow:", e);
       }
     }
-
     clearSessionState('dynamic');
     if (onComplete) onComplete();
     else navigate('/student/home');
   }, [navigate, onComplete]);
 
   const nextStep = () => {
-    if (step < 6) {
+    if (step < 10) {
       const nextS = step + 1;
       setStep(nextS);
       updateCurrentStep('dynamic', nextS);
@@ -148,23 +158,33 @@ export default function DynamicFlow({ week, dayIndex, onBack, onComplete }) {
       
       {/* ───── Background Image ───── */}
       <AnimatePresence mode="wait">
-        {step === 0 && <BackgroundImage key="dailycontext" src="/dynamicflow/dailyprompt.png" />}
-        {step === 1 && selection === 'friends' && <BackgroundImage key="friends" src="/dynamicflow/friends.png" />}
-        {step === 1 && selection === 'school' && <BackgroundImage key="school" src="/dynamicflow/school.png" />}
-        {step === 1 && selection === 'myself' && <BackgroundImage key="myself" src="/dynamicflow/myself.png" />}
-        {step === 1 && !selection && <BackgroundImage key="feedback" src="/dynamicflow/dailyprompt.png" />}
-        {step === 2 && <BackgroundImage key="scenario" src="/dynamicflow/senario.png" />}
-        {step === 3 && <BackgroundImage key="reflection" src="/dynamicflow/reflection.png" />}
-        {step === 4 && <BackgroundImage key="insight" src="/dynamicflow/insight.png" />}
-        {step === 5 && <BackgroundImage key="challenge" src="/dynamicflow/challenge.jpeg" />}
-        {step === 6 && <BackgroundImage key="completion" src="/dynamicflow/completion.png" />}
+        {step === 0 && <BackgroundImage key="momentcard" src="/dynamicflow/momentcard.jpeg" />}
+        {step === 1 && selection === 'friends' && <BackgroundImage key="context_friends" src="/dynamicflow/contextnarrow_friends.png" />}
+        {step === 1 && selection === 'school' && <BackgroundImage key="context_school" src="/dynamicflow/contextnarrow_school.png" />}
+        {step === 1 && selection === 'myself' && <BackgroundImage key="context_myself" src="/dynamicflow/contextnarrow_myself.png" />}
+        {step === 1 && !selection && <BackgroundImage key="context_fallback" src="/dynamicflow/contextnarrow_friends.png" />}
+        
+        {step === 2 && <BackgroundImage key="mental_replay" src="/dynamicflow/mentalreplay.png" />}
+        {step === 3 && <BackgroundImage key="story_start" src="" />} {/* Black background for chat */}
+        
+        {step === 4 && storySelection === 'ask' && <BackgroundImage key="consequence_ask" src="" />}
+        {step === 4 && storySelection === 'wait' && <BackgroundImage key="consequence_wait" src="/dynamicflow/ifwait.png" />}
+        {step === 4 && storySelection === 'overthink' && <BackgroundImage key="consequence_overthink" src="/dynamicflow/ifoverthink.png" />}
+        {step === 4 && storySelection === 'avoid' && <BackgroundImage key="consequence_avoid" src="/dynamicflow/ifavoid.png" />}
+        
+        {step === 5 && <BackgroundImage key="prediction" src="/dynamicflow/predictionscreen.png" />}
+        {step === 6 && <BackgroundImage key="seen_before" src="/dynamicflow/haveyoueverseen.png" />}
+        {/* step 7: optional reflection - solid black bg */}
+        {step === 8 && <BackgroundImage key="behaviour_insight" src="/dynamicflow/behaviourinsight.png" />}
+        {step === 9 && <BackgroundImage key="challenge" src="/dynamicflow/missionscreen.png" />}
+        {step === 10 && <BackgroundImage key="completion" src="/dynamicflow/completion.png" />}
       </AnimatePresence>
 
       {/* Dark overlay for readability */}
-      <div className="absolute inset-0 bg-black/40 pointer-events-none z-0" />
+      <div className={`absolute inset-0 pointer-events-none z-0 ${[3].includes(step) || (step === 4 && storySelection === 'ask') ? 'bg-[#0d0d12]' : 'bg-black/50'}`} />
 
       {/* ───── Top Navigation ───── */}
-      {step > 0 && step < 6 && (
+      {step > 0 && step < 10 && (
         <div className="relative z-10 flex items-center px-6 pt-safe pt-8 pb-4">
           <button
             onClick={prevStep}
@@ -175,7 +195,7 @@ export default function DynamicFlow({ week, dayIndex, onBack, onComplete }) {
             </svg>
           </button>
 
-          {/* Progress Bar — 7 segments */}
+          {/* Progress Bar */}
           <div className="ml-4 flex-1 flex items-center gap-1.5">
             {STEPS.map((s) => (
               <div key={s.id} className="h-[4px] flex-1 rounded-full bg-white/20 overflow-hidden">
@@ -197,98 +217,145 @@ export default function DynamicFlow({ week, dayIndex, onBack, onComplete }) {
       <div className="relative z-10 flex-1 flex flex-col">
         <AnimatePresence mode="wait">
 
-          {/* Step 0: DailyContext */}
+          {/* Step 0: Moment Card */}
           {step === 0 && (
             <motion.div key="0" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex-1 flex flex-col pt-safe pt-8">
-              <DailyContextStep
-                onSelect={(s) => {
+              <MomentCardStep
+                onSelect={(selectedContext) => {
                   tracker.trackTap();
                   tracker.trackFirstInteraction();
-                  setSelection(s);
-                  submitCurrentStep({ selection: s });
+                  setSelection(selectedContext);
+                  submitCurrentStep({ selection: selectedContext });
                   nextStep();
                 }}
               />
             </motion.div>
           )}
 
-          {/* Step 1: MicroFeedback */}
+          {/* Step 1: Context Narrowing */}
           {step === 1 && (
             <motion.div key="1" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex-1 flex flex-col">
-              <MicroFeedbackStep
+              <ContextNarrowingStep
                 selection={selection}
-                onNext={(text) => {
-                  tracker.trackTextInput(text);
-                  handleStepSubmitAndNext({ text, selection });
+                onSelect={(narrowId, narrowTitle) => {
+                  tracker.trackTap();
+                  setNarrowSelection(narrowId);
+                  handleStepSubmitAndNext({ narrowSelection: narrowId, narrowTitle });
                 }}
-                onTextChange={(text) => tracker.trackTextInput(text)}
               />
             </motion.div>
           )}
 
-          {/* Step 2: Scenario */}
+          {/* Step 2: Mental Replay */}
           {step === 2 && (
             <motion.div key="2" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex-1 flex flex-col">
-              <ScenarioStep
-                onNext={(selectedOption) => {
+              <MentalReplayStep
+                onNext={(replayData) => {
                   tracker.trackTap();
                   tracker.trackFirstInteraction();
-                  handleStepSubmitAndNext({ selectedOption });
+                  handleStepSubmitAndNext(replayData);
                 }}
-                data={content}
               />
             </motion.div>
           )}
 
-          {/* Step 3: Reflection */}
+          {/* Step 3: Story Start */}
           {step === 3 && (
-            <motion.div key="3" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex-1 flex flex-col">
-              <ReflectionStep
-                onNext={(response) => {
+            <motion.div key="3" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex-1 flex flex-col h-full">
+              <StoryStartStep
+                selection={selection}
+                onNext={(storyData) => {
                   tracker.trackTap();
                   tracker.trackFirstInteraction();
-                  handleStepSubmitAndNext(typeof response === 'string' ? { reflectionText: response } : { selectedOption: response });
+                  setStorySelection(storyData.storyStartOption);
+                  handleStepSubmitAndNext(storyData);
                 }}
-                onTextChange={(text) => tracker.trackTextInput(text)}
-                data={content}
               />
             </motion.div>
           )}
 
-          {/* Step 4: Insight */}
+          {/* Step 4: Immediate Consequence */}
           {step === 4 && (
-            <motion.div key="4" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex-1 flex flex-col">
-              <InsightStep
-                onNext={(selectedOption) => {
+            <motion.div key="4" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex-1 flex flex-col h-full">
+              <ImmediateConsequenceStep
+                storySelection={storySelection}
+                onNext={(data) => {
                   tracker.trackTap();
                   tracker.trackFirstInteraction();
-                  handleStepSubmitAndNext({ selectedOption });
+                  handleStepSubmitAndNext(data);
                 }}
-                data={content}
               />
             </motion.div>
           )}
 
-          {/* Step 5: Challenge */}
+          {/* Step 5: What Happens Next */}
           {step === 5 && (
             <motion.div key="5" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex-1 flex flex-col">
+              <WhatHappensNextStep
+                onSelect={(predictionId) => {
+                  tracker.trackTap();
+                  tracker.trackFirstInteraction();
+                  handleStepSubmitAndNext({ prediction: predictionId });
+                }}
+              />
+            </motion.div>
+          )}
+          {/* Step 6: Have You Seen Before */}
+          {step === 6 && (
+            <motion.div key="6" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex-1 flex flex-col h-full">
+              <HaveYouSeenBeforeStep
+                onSelect={(historyId) => {
+                  tracker.trackTap();
+                  tracker.trackFirstInteraction();
+                  handleStepSubmitAndNext({ seenBefore: historyId });
+                }}
+              />
+            </motion.div>
+          )}
+
+          {/* Step 7: Optional Reflection */}
+          {step === 7 && (
+            <motion.div key="7" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex-1 flex flex-col h-full">
+              <OptionalReflectionStep
+                onNext={(data) => {
+                  tracker.trackTap();
+                  tracker.trackFirstInteraction();
+                  handleStepSubmitAndNext(data);
+                }}
+              />
+            </motion.div>
+          )}
+
+          {/* Step 8: Behaviour Insight */}
+          {step === 8 && (
+            <motion.div key="8" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex-1 flex flex-col h-full">
+              <BehaviourInsightStep
+                selection={selection}
+                onNext={(data) => {
+                  tracker.trackTap();
+                  tracker.trackFirstInteraction();
+                  handleStepSubmitAndNext(data);
+                }}
+              />
+            </motion.div>
+          )}
+
+          {/* Step 9: Challenge */}
+          {step === 9 && (
+            <motion.div key="9" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex-1 flex flex-col h-full">
               <ChallengeStep
                 onNext={(challengeData) => {
                   tracker.trackTap();
                   tracker.trackFirstInteraction();
-                  handleStepSubmitAndNext(challengeData || {});
+                  handleStepSubmitAndNext(challengeData);
                 }}
-                onTrackTap={tracker.trackTap}
-                onTrackOptionChange={tracker.trackOptionChange}
-                onTrackFirstInteraction={tracker.trackFirstInteraction}
-                data={content}
               />
             </motion.div>
           )}
 
-          {/* Step 6: Completion */}
-          {step === 6 && (
-            <motion.div key="6" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex-1 flex flex-col">
+          {/* Step 10: Completion */}
+          {step === 10 && (
+            <motion.div key="10" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex-1 flex flex-col">
               <CompletionStep
                 onHome={() => {
                   submitCurrentStep({ completed: true });
