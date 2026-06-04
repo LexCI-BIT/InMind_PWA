@@ -12,7 +12,6 @@ import { WhatHappensNextStep } from './WhatHappensNextStep';
 import { HaveYouSeenBeforeStep } from './HaveYouSeenBeforeStep';
 import { OptionalReflectionStep } from './OptionalReflectionStep';
 import { BehaviourInsightStep } from './BehaviourInsightStep';
-import { InsightStep } from './InsightStep';
 import { ChallengeStep } from './ChallengeStep';
 import { CompletionStep } from './CompletionStep';
 
