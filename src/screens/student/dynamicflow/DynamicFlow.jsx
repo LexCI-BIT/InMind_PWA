@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { WEEKS } from '../mindlab/weeklyData';
+import { WEEKS } from '../challenges/weeklyData';
 
 import { MomentCardStep } from './MomentCardStep';
 import { ContextNarrowingStep } from './ContextNarrowingStep';

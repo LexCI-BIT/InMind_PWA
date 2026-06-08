@@ -52,7 +52,7 @@ const EXPLORER = [
     )
   },
   { 
-    id: 'challenges', label: 'Daily Challenges', path: '/student/challenges',
+    id: 'challenges', label: 'Weekly Challenges', path: '/student/challenges',
     iconBg: '#99f6e4', iconColor: '#0f766e',
     Icon: () => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

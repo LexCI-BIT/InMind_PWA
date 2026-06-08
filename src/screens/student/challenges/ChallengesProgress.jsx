@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
-export function MindLabProgress() {
+export function ChallengesProgress() {
   const navigate = useNavigate();
 
   return (
@@ -11,7 +11,7 @@ export function MindLabProgress() {
       <div className="fixed top-0 left-0 w-full max-w-[440px] mx-auto z-30 px-6 pt-safe pt-8 flex justify-between items-center pointer-events-none">
         <button
           type="button"
-          onClick={() => navigate('/student/mindlab')}
+          onClick={() => navigate('/student/challenges')}
           className="p-2 -ml-2 text-white hover:opacity-80 transition bg-black/40 rounded-full backdrop-blur-sm shadow-md border border-white/10 pointer-events-auto"
         >
           <svg viewBox="0 0 24 24" className="h-6 w-6 pr-1" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -41,7 +41,7 @@ export function MindLabProgress() {
               img="/gamification/forest.png" 
               active={true}
               color="#10b981"
-              onClick={() => navigate('/student/mindlab/week1')}
+              onClick={() => navigate('/student/challenges/week1')}
             />
           </div>
 

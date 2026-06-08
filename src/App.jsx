@@ -19,7 +19,7 @@ import { Quiz } from './screens/student/quiz/Quiz';
 import { QuizList } from './screens/student/quiz/QuizList';
 import { ShareThought } from './screens/student/share/ShareThought';
 import { AudioSpace } from './screens/student/AudioSpace';
-import { DailyChallenges } from './screens/student/challenges/DailyChallenges';
+// (Challenges moved below)
 import { Workshop } from './screens/student/Workshop';
 import { Activities } from './screens/student/Activities';
 import { Insights } from './screens/student/Insights';
@@ -31,9 +31,12 @@ import { MoodReason } from './screens/student/MoodReason';
 import { JournalEntry } from './screens/student/journal/JournalEntry';
 import { QuizComplete } from './screens/student/quiz/QuizComplete';
 import { MindLab } from './screens/student/mindlab/MindLab';
-import { WeekDetail } from './screens/student/mindlab/WeekDetail';
-import { Week1 } from './screens/student/mindlab/Week1';
-import { MindLabProgress } from './screens/student/mindlab/MindLabProgress';
+import { WordQuest } from './screens/student/mindlab/WordQuest';
+import { WordQuestGame } from './screens/student/mindlab/WordQuestGame';
+import { WeeklyChallenges } from './screens/student/challenges/WeeklyChallenges';
+import { WeekDetail } from './screens/student/challenges/WeekDetail';
+import { Week1 } from './screens/student/challenges/Week1';
+import { ChallengesProgress } from './screens/student/challenges/ChallengesProgress';
 import { StudentProfile } from './screens/student/Profile';
 import { PathSelect } from './screens/student/PathSelect';
 import { Academic } from './screens/student/academic/Academic';
@@ -42,7 +45,7 @@ import { ExpertMentors } from './screens/student/academic/mentor-support/ExpertM
 import { MentorCategory } from './screens/student/academic/mentor-support/MentorCategory';
 import { MentorProfile } from './screens/student/academic/mentor-support/MentorProfile';
 import { MentorBookingFlow } from './screens/student/academic/mentor-support/MentorBookingFlow';
-import { WeeklyDetail } from './screens/student/mindlab/WeeklyDetail';
+import { WeeklyDetail } from './screens/student/challenges/WeeklyDetail';
 import { Notifications } from './screens/student/Notifications';
 
 // ─── Parent ─────────────────────────────────────────────────
@@ -143,7 +146,11 @@ function AnimatedRoutes() {
         <Route path="/student/quiz/take" element={<Quiz />} />
         <Route path="/student/share" element={<ShareThought />} />
         <Route path="/student/audio" element={<AudioSpace />} />
-        <Route path="/student/challenges" element={<DailyChallenges />} />
+        <Route path="/student/challenges" element={<WeeklyChallenges />} />
+        <Route path="/student/challenges/progress" element={<ChallengesProgress />} />
+        <Route path="/student/challenges/week1" element={<Week1 />} />
+        <Route path="/student/challenges/week/:weekId" element={<WeekDetail />} />
+        <Route path="/student/challenges/weekly/:weekId" element={<WeeklyDetail />} />
         <Route path="/student/workshop" element={<Workshop />} />
         <Route path="/student/mindspace" element={<Activities />} />
         <Route path="/student/activities" element={<Activities />} />
@@ -153,10 +160,8 @@ function AnimatedRoutes() {
         <Route path="/student/journal/:id" element={<JournalEntry />} />
         <Route path="/student/quiz/complete" element={<QuizComplete />} />
         <Route path="/student/mindlab" element={<MindLab />} />
-        <Route path="/student/mindlab/week/:weekId" element={<WeekDetail />} />
-        <Route path="/student/mindlab/week1" element={<Week1 />} />
-        <Route path="/student/mindlab/progress" element={<MindLabProgress />} />
-        <Route path="/student/mindlab/weekly/:weekId" element={<WeeklyDetail />} />
+        <Route path="/student/mindlab/wordquest" element={<WordQuest />} />
+        <Route path="/student/mindlab/wordquest/play" element={<WordQuestGame />} />
         <Route path="/student/profile" element={<StudentProfile />} />
         <Route path="/student/notifications" element={<Notifications />} />
 
