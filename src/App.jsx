@@ -33,6 +33,7 @@ import { QuizComplete } from './screens/student/quiz/QuizComplete';
 import { MindLab } from './screens/student/mindlab/MindLab';
 import { WordQuest } from './screens/student/mindlab/WordQuest';
 import { WordQuestGame } from './screens/student/mindlab/WordQuestGame';
+import BrainFeedFlow from './screens/student/mindlab/brainfeed/BrainFeedFlow';
 import { WeeklyChallenges } from './screens/student/challenges/WeeklyChallenges';
 import { WeekDetail } from './screens/student/challenges/WeekDetail';
 import { Week1 } from './screens/student/challenges/Week1';
@@ -162,6 +163,7 @@ function AnimatedRoutes() {
         <Route path="/student/mindlab" element={<MindLab />} />
         <Route path="/student/mindlab/wordquest" element={<WordQuest />} />
         <Route path="/student/mindlab/wordquest/play" element={<WordQuestGame />} />
+        <Route path="/student/mindlab/brainfeed" element={<BrainFeedFlow />} />
         <Route path="/student/profile" element={<StudentProfile />} />
         <Route path="/student/notifications" element={<Notifications />} />
 

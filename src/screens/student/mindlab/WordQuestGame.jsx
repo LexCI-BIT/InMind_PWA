@@ -7,26 +7,31 @@ const WORD_DATA = [
   {
     word: 'EMPATHY',
     clue: "The ability to understand and share another person's feelings.",
+    example: "When your friend is upset and you try to understand how they feel and comfort them, that is empathy.",
     extras: ['Z', 'B', 'C'],
   },
   {
     word: 'COURAGE',
     clue: 'The strength to face fear, pain, or difficulty.',
+    example: "Standing up for a classmate who is being picked on takes a lot of courage.",
     extras: ['Z', 'X', 'K'],
   },
   {
     word: 'RESPECT',
     clue: 'Treating others with consideration and honor.',
+    example: "Listening quietly while someone else is speaking is a good way to show respect.",
     extras: ['Z', 'X', 'K'],
   },
   {
     word: 'BELIEVE',
     clue: 'To have confidence or faith in something or someone.',
+    example: "Even when the task is hard, you must believe in yourself to succeed.",
     extras: ['Z', 'X', 'K'],
   },
   {
     word: 'HONESTY',
     clue: 'The quality of being truthful and sincere.',
+    example: "Admitting that you made a mistake instead of hiding it is a sign of true honesty.",
     extras: ['Z', 'X', 'K'],
   },
 ];
@@ -94,8 +99,11 @@ export function WordQuestGame() {
   const [letters, setLetters] = useState(initRef.current.letters);
   const [slots, setSlots] = useState(initRef.current.slots);
 
-  /* game phase: playing | checking | correct | wrong */
+  /* game phase: playing | checking | correct | wrong | failed */
   const [phase, setPhase] = useState('playing');
+  const [attempts, setAttempts] = useState(3);
+  const [showWrongModal, setShowWrongModal] = useState(false);
+  const [hintsUsed, setHintsUsed] = useState(0);
 
   /* ── Place a letter into the next empty answer slot ── */
   const placeLetter = useCallback(
@@ -139,13 +147,23 @@ export function WordQuestGame() {
     setTimeout(() => {
       if (attempt === current.word) {
         setPhase('correct');
-        setScore((s) => s + 1);
+        setScore((s) => s + 10);
       } else {
         setPhase('wrong');
-        setTimeout(() => setPhase('playing'), 1000);
+        setTimeout(() => {
+          if (attempts > 1) {
+            setAttempts((a) => a - 1);
+            setShowWrongModal(true);
+            setPhase('playing');
+          } else {
+            setAttempts(0);
+            setScore((s) => Math.max(0, s - 10));
+            setPhase('failed');
+          }
+        }, 1000);
       }
     }, 600);
-  }, [slots, letters, current]);
+  }, [slots, letters, current, attempts]);
 
   /* ── Next word ── */
   const nextWord = useCallback(() => {
@@ -163,6 +181,9 @@ export function WordQuestGame() {
     setLetters(newState.letters);
     setSlots(newState.slots);
 
+    setAttempts(3);
+    setShowWrongModal(false);
+    setHintsUsed(0);
     setPhase('playing');
   }, [levelIndex, navigate]);
 
@@ -201,7 +222,7 @@ export function WordQuestGame() {
 
         {/* ── WORD QUEST title ── */}
         <AnimatePresence>
-          {phase !== 'correct' && (
+          {phase !== 'correct' && phase !== 'failed' && (
             <motion.h1
               initial={{ opacity: 0, y: -15 }}
               animate={{ opacity: 1, y: 0 }}
@@ -230,7 +251,7 @@ export function WordQuestGame() {
 
         {/* ── Speech bubble ── */}
         <AnimatePresence>
-          {phase !== 'correct' && (
+          {phase !== 'correct' && phase !== 'failed' && (
             <motion.div
               key={current.clue}
               initial={{ opacity: 0, scale: 0.9, x: 10 }}
@@ -251,11 +272,17 @@ export function WordQuestGame() {
                   className="mb-1 text-[13.5px] font-bold text-center"
                   style={{ color: '#b28912' }}
                 >
-                  Quest Clue:
+                  {hintsUsed === 2 ? 'Quest Clue(Easiest):' : hintsUsed === 1 ? 'Quest Clue(Easier):' : 'Quest Clue:'}
                 </p>
                 <p className="text-center text-[12.5px] font-medium leading-relaxed text-[#333]">
                   {current.clue}
                 </p>
+                {hintsUsed > 0 && (
+                  <p className="text-center text-[12.5px] font-bold mt-1.5 flex flex-col gap-0.5" style={{ color: '#ef4444' }}>
+                    <span>Starts With: {current.word[0]}</span>
+                    {hintsUsed > 1 && <span>Ends With: {current.word[current.word.length - 1]}</span>}
+                  </p>
+                )}
 
                 {/* Bubble tail pointing left */}
                 <div
@@ -273,7 +300,7 @@ export function WordQuestGame() {
 
         {/* ── Wooden wheel area ── */}
         <AnimatePresence>
-          {phase !== 'correct' && (
+          {phase !== 'correct' && phase !== 'failed' && (
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -477,9 +504,38 @@ export function WordQuestGame() {
             })}
           </div>
 
-          {/* ── CHECK / NEXT button ── */}
-          <div className="mt-3 flex justify-center min-h-[48px]">
+          {/* ── CHECK / NEXT / HINT buttons ── */}
+          <div className="mt-3 flex justify-center items-center gap-4 min-h-[48px] px-6">
             <AnimatePresence mode="wait">
+              {/* ── Hint Button ── */}
+              {((attempts < 3 && hintsUsed === 0) || (attempts < 2 && hintsUsed === 1)) && phase === 'playing' && (
+                <motion.button
+                  key="hint"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  whileTap={{ scale: 0.94 }}
+                  onClick={() => setHintsUsed(h => h + 1)}
+                  className="relative rounded-xl px-5 py-3 text-[15px] font-bold shadow-xl flex items-center justify-center gap-2"
+                  style={{
+                    background: 'linear-gradient(180deg, #462512 0%, #2a1608 100%)',
+                    border: '1.5px solid #6b3e1e',
+                    color: '#f0c070',
+                    boxShadow: '0 4px 8px rgba(0,0,0,0.5), inset 0 2px 2px rgba(255,255,255,0.05)',
+                  }}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-5 h-5" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M9 18h6" />
+                    <path d="M10 22h4" />
+                    <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14" />
+                  </svg>
+                  Hint
+                  <div className="absolute -top-2 -right-2 bg-yellow-500 text-black text-[11px] font-black w-5 h-5 rounded-full flex items-center justify-center border-[1.5px] border-[#2a1608] shadow-md">
+                    1
+                  </div>
+                </motion.button>
+              )}
+
               {allFilled && phase === 'playing' && (
                 <motion.button
                   key="check"
@@ -575,6 +631,98 @@ export function WordQuestGame() {
                   {['✨', '🌟', '⭐', '🎉', '💫'][i % 5]}
                 </motion.span>
               ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* ── Wrong Modal ── */}
+        <AnimatePresence>
+          {showWrongModal && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="absolute inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-6"
+            >
+              <div 
+                className="w-full max-w-[280px] rounded-xl flex flex-col items-center p-6 text-center shadow-2xl"
+                style={{
+                  background: '#3e1c00', // dark brown
+                  border: '2px solid #eab308' // yellow
+                }}
+              >
+                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-red-600 mb-5 shadow-[0_0_15px_rgba(220,38,38,0.5)] border-[3px] border-white/20">
+                  <svg className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </div>
+                <h2 className="text-[22px] font-bold text-white mb-1">Not quite!</h2>
+                <p className="text-[15px] text-gray-300 mb-5">Try again</p>
+                
+                <div className="w-full border-t border-dashed border-white/30 my-2"></div>
+                
+                <p className="text-[15px] text-white font-medium mt-4 mb-1">Attempts Remaining:</p>
+                <p className="text-[32px] font-black text-yellow-500 mb-7 drop-shadow-md">{attempts}</p>
+                
+                <button
+                  onClick={() => setShowWrongModal(false)}
+                  className="w-[65%] rounded-md bg-yellow-500 py-2.5 text-[16px] font-bold text-[#3e1c00] transition hover:bg-yellow-400 active:scale-95 shadow-md"
+                >
+                  Okay
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* ── Failed Overlay ── */}
+        <AnimatePresence>
+          {phase === 'failed' && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 z-50 flex flex-col items-center justify-center px-6 bg-black/60 backdrop-blur-md"
+            >
+              {/* Meaning & Example Box */}
+              <div 
+                className="w-full max-w-[320px] rounded-xl p-5 mb-5"
+                style={{ background: '#0a0a0a', border: '1px solid rgba(0, 120, 212, 0.4)' }}
+              >
+                <p className="text-yellow-500 font-bold text-[16px] mb-1.5 drop-shadow-sm">Meaning:</p>
+                <p className="text-gray-200 text-[15px] leading-snug mb-5">{current.clue}</p>
+                
+                <p className="text-yellow-500 font-bold text-[16px] mb-1.5 drop-shadow-sm">Example:</p>
+                <p className="text-gray-200 text-[15px] leading-snug">
+                  {current.example.split(new RegExp(`(${current.word})`, 'gi')).map((part, i) => 
+                    part.toLowerCase() === current.word.toLowerCase() ? <strong key={i} className="text-yellow-500">{part}</strong> : part
+                  )}
+                </p>
+              </div>
+
+              {/* -10 Points Box */}
+              <div 
+                className="w-full max-w-[320px] rounded-xl p-6 flex flex-col items-center"
+                style={{ background: '#111111', border: '1px solid #333' }}
+              >
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-red-600 shadow-[0_0_10px_rgba(220,38,38,0.5)] border border-white/20">
+                    <svg className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </div>
+                  <span className="text-red-500 text-[22px] font-bold tracking-wide drop-shadow-md">-10 Points</span>
+                </div>
+                
+                <p className="text-gray-300 font-medium mb-7 text-[16px]">Better luck next time!</p>
+                
+                <button
+                  onClick={nextWord}
+                  className="w-[80%] rounded-[10px] bg-[#dca331] py-3 text-[17px] font-semibold text-[#110d04] transition hover:bg-[#b2842e] active:scale-95 shadow-lg"
+                >
+                  Continue
+                </button>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>

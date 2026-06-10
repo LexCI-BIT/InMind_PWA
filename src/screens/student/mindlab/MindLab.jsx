@@ -88,6 +88,51 @@ export function MindLab() {
           </div>
         </motion.div>
 
+        {/* Brain Feed Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.4 }}
+          className="relative mt-5 w-full overflow-hidden rounded-[14px] bg-[#1a1b1f] border-l-[3px] border-[#dca331] shadow-lg"
+        >
+          <div className="flex justify-between items-center px-6 py-8">
+            
+            {/* Left Content */}
+            <div className="relative z-10 flex-1 max-w-[180px]">
+              <p className="text-[9px] font-bold tracking-[0.15em] text-white/40 uppercase mb-2">
+                Brain Feed
+              </p>
+              <h3 className="text-[20px] font-normal leading-tight text-white mb-2">
+                Small discoveries.
+              </h3>
+              <p className="text-[10px] leading-relaxed text-white/50 mb-5 max-w-[140px]">
+                Every scroll should leave you smarter.
+              </p>
+              
+              <button
+                type="button"
+                onClick={() => navigate('/student/mindlab/brainfeed')}
+                className="flex items-center gap-1.5 rounded-full bg-[#9e7427] px-4 py-1.5 text-[11px] font-medium text-[#fcedc7] transition hover:bg-[#b2842e]"
+              >
+                Scroll
+                <svg viewBox="0 0 20 20" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M4 10h12" />
+                  <path d="M12 6l4 4-4 4" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Right Image (Brain Feed Lightbulb) */}
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 w-[120px] pointer-events-none mix-blend-lighten">
+              <img 
+                src="/mindlab/brainfeed.png" 
+                alt="Brain Lightbulb" 
+                className="w-full h-auto object-cover rounded-xl drop-shadow-xl opacity-90"
+              />
+            </div>
+          </div>
+        </motion.div>
+
       </div>
     </section>
   );
