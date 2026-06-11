@@ -35,6 +35,9 @@ import { WordQuest } from './screens/student/mindlab/WordQuest';
 import { WordQuestGame } from './screens/student/mindlab/WordQuestGame';
 import BrainFeedFlow from './screens/student/mindlab/brainfeed/BrainFeedFlow';
 import BrainThreadGame from './screens/student/mindlab/brainthread/BrainThreadGame';
+import { PicturePerceptionDashboard } from './screens/student/mindlab/pictureperception/PicturePerceptionDashboard';
+import { PictureStoryIntro } from './screens/student/mindlab/pictureperception/PictureStoryIntro';
+import { PictureStoryGame } from './screens/student/mindlab/pictureperception/PictureStoryGame';
 import { WeeklyChallenges } from './screens/student/challenges/WeeklyChallenges';
 import { WeekDetail } from './screens/student/challenges/WeekDetail';
 import { Week1 } from './screens/student/challenges/Week1';
@@ -166,6 +169,9 @@ function AnimatedRoutes() {
         <Route path="/student/mindlab/wordquest/play" element={<WordQuestGame />} />
         <Route path="/student/mindlab/brainfeed" element={<BrainFeedFlow />} />
         <Route path="/student/mindlab/brainthread" element={<BrainThreadGame />} />
+        <Route path="/student/mindlab/pictureperception" element={<PicturePerceptionDashboard />} />
+        <Route path="/student/mindlab/pictureperception/intro" element={<PictureStoryIntro />} />
+        <Route path="/student/mindlab/pictureperception/game" element={<PictureStoryGame />} />
         <Route path="/student/profile" element={<StudentProfile />} />
         <Route path="/student/notifications" element={<Notifications />} />
 
