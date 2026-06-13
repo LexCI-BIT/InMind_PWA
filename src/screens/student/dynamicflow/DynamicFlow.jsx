@@ -161,6 +161,8 @@ export default function DynamicFlow({ week, dayIndex, onBack, onComplete }) {
         {step === 1 && selection === 'friends' && <BackgroundImage key="context_friends" src="/dynamicflow/contextnarrow_friends.png" />}
         {step === 1 && selection === 'school' && <BackgroundImage key="context_school" src="/dynamicflow/contextnarrow_school.png" />}
         {step === 1 && selection === 'myself' && <BackgroundImage key="context_myself" src="/dynamicflow/contextnarrow_myself.png" />}
+        {step === 1 && selection === 'family' && <BackgroundImage key="context_family" src="/dynamicflow/contextnarrow_parent.png" />}
+        {step === 1 && selection === 'future' && <BackgroundImage key="context_future" src="/dynamicflow/contextnarrow_future.png" />}
         {step === 1 && !selection && <BackgroundImage key="context_fallback" src="/dynamicflow/contextnarrow_friends.png" />}
         
         {step === 2 && <BackgroundImage key="mental_replay" src="/dynamicflow/mentalreplay.png" />}

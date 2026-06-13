@@ -1,6 +1,25 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { MessageCircle, User, Users, Zap, BookOpen, Calendar, Leaf, CheckCircle, Heart, ChevronRight } from 'lucide-react';
+import { MessageCircle, User, Users, Zap, BookOpen, Calendar, Leaf, CheckCircle, Heart, ChevronRight, RefreshCcw, Target, Briefcase, CircleHelp, CalendarDays } from 'lucide-react';
+
+const FamilyConflictIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 text-red-400">
+    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M13 10l-4 5h5l-4 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const CareAboutIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 text-pink-400">
+    <path d="M12 14C13.6569 14 15 12.6569 15 11C15 9.34315 13.6569 8 12 8C10.3431 8 9 9.34315 9 11C9 12.6569 10.3431 14 12 14Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M17 22C17 19.2386 14.7614 17 12 17C9.23858 17 7 19.2386 7 22" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M6.5 15C7.32843 15 8 14.3284 8 13.5C8 12.6716 7.32843 12 6.5 12C5.67157 12 5 12.6716 5 13.5C5 14.3284 5.67157 15 6.5 15Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M2 22C2 20.3431 3.34315 19 5 19C5.82843 19 6.57843 19.3358 7.12132 19.8787" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M17.5 15C18.3284 15 19 14.3284 19 13.5C19 12.6716 18.3284 12 17.5 12C16.6716 12 16 12.6716 16 13.5C16 14.3284 16.6716 15 17.5 15Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M22 22C22 20.3431 20.6569 19 19 19C18.1716 19 17.4216 19.3358 16.8787 19.8787" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M12 7.5C12 7.5 10 5.5 10 4C10 3.17157 10.6716 2.5 11.5 2.5C12 2.5 12 3 12 3C12 3 12 2.5 12.5 2.5C13.3284 2.5 14 3.17157 14 4C14 5.5 12 7.5 12 7.5Z" fill="#f43f5e" stroke="#f43f5e" strokeWidth="1"/>
+  </svg>
+);
 
 export function ContextNarrowingStep({ selection, onSelect }) {
   
@@ -34,6 +53,26 @@ export function ContextNarrowingStep({ selection, onSelect }) {
         { id: 'future', title: 'Future', desc: 'Thoughts about upcoming plans, goals, or uncertainty.', icon: <Leaf className="w-6 h-6 text-green-200" /> },
         { id: 'decision', title: 'Decision I made', desc: 'Something you chose to do and keep thinking about.', icon: <CheckCircle className="w-6 h-6 text-green-200" /> },
         { id: 'regret', title: 'Something I Regret', desc: 'Something you wish had gone differently.', icon: <Heart className="w-6 h-6 text-green-200" /> }
+      ]
+    },
+    family: {
+      title: <>What stayed on<br/>your <span className="text-yellow-500 font-bold">mind</span>?</>,
+      subtitle: 'Choose what feels closest?',
+      options: [
+        { id: 'family_conflict', title: 'Family Conflict', desc: 'Arguments, misunderstandings, or tension at home.', icon: <FamilyConflictIcon /> },
+        { id: 'family_care', title: 'Someone I Care About', desc: 'Thoughts about a parent, sibling, child, or loved one.', icon: <CareAboutIcon /> },
+        { id: 'family_resp', title: 'Family Responsibility', desc: 'Pressure, duties, expectations, or supporting others.', icon: <Users className="w-6 h-6 text-yellow-500" /> },
+        { id: 'family_change', title: 'Family Change', desc: 'A major change, transition, or uncertainty within the family.', icon: <RefreshCcw className="w-6 h-6 text-green-400" /> }
+      ]
+    },
+    future: {
+      title: <>Scared about the<br/><span className="text-yellow-500 font-bold">future</span>?</>,
+      subtitle: 'Choose what feels closest?',
+      options: [
+        { id: 'future_uncertain', title: 'Uncertain About What\'s Next', desc: 'Not sure what the future holds or which direction to take.', icon: <CalendarDays className="w-6 h-6 text-purple-400" /> },
+        { id: 'future_goals', title: 'Worried About Goals', desc: 'Concerned about achieving my goals or meeting my expectations.', icon: <Target className="w-6 h-6 text-blue-400" /> },
+        { id: 'future_career', title: 'Career & Financial Worries', desc: 'Stressed about my job, finances, or long-term stability.', icon: <Briefcase className="w-6 h-6 text-yellow-500" /> },
+        { id: 'future_unknown', title: 'Afraid of the Unknown', desc: 'Anxious about things I can\'t control or predict.', icon: <CircleHelp className="w-6 h-6 text-teal-400" /> }
       ]
     }
   };
