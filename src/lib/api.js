@@ -65,21 +65,28 @@ export function signupTeacher(payload) {
 }
 
 // Flow & Telemetry
-export function getDailyFlowScreen(sessionId = null) {
+const USE_MOCK_TELEMETRY = true; // Prevents console network errors when backend is not running
+
+export async function getDailyFlowScreen(sessionId = null) {
+  if (USE_MOCK_TELEMETRY) {
+    return { session_id: 'mock-session-123' };
+  }
   const url = sessionId ? `/flow/daily-flow?session_id=${sessionId}` : '/flow/daily-flow';
   return apiRequest(url, {
     method: 'POST',
   });
 }
 
-export function submitScreenResponse(payload) {
+export async function submitScreenResponse(payload) {
+  if (USE_MOCK_TELEMETRY) return { success: true };
   return apiRequest('/responses/response', {
     method: 'POST',
     body: JSON.stringify(payload),
   });
 }
 
-export function submitBodyMap(payload) {
+export async function submitBodyMap(payload) {
+  if (USE_MOCK_TELEMETRY) return { success: true };
   return apiRequest('/responses/body-map', {
     method: 'POST',
     body: JSON.stringify(payload),

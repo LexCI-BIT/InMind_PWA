@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { MOODS, FaceFeatures, NONE } from './EmotionStep';
+import { PRIMARY_EMOTIONS } from './EmotionStep';
 
 const REASONS = [
   { id: 'family', label: 'Family', icon: <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/> },
@@ -14,102 +14,59 @@ const REASONS = [
   { id: 'sleep', label: 'Sleep', icon: <path d="M9 2c-1.05 0-2.05.16-3 .46 4.06 1.27 7 5.06 7 9.54 0 4.48-2.94 8.27-7 9.54.95.3 1.95.46 3 .46 5.52 0 10-4.48 10-10S14.52 2 9 2z"/> },
 ];
 
-const SECONDARY = [
-  'Stressed', 'Anxious', 'Tired',
-  'Lonely', 'Bored', 'Sick',
-  'Confused', 'Lost', 'Numb'
-];
-
-export function ReasonStep({ primaryEmotion, reason, setReason, secondaryReasons, setSecondaryReasons }) {
-  const mood = MOODS.find(m => m.id === primaryEmotion) || NONE;
-
-  const toggleSecondary = (sec) => {
-    setSecondaryReasons(prev => 
-      prev.includes(sec) ? prev.filter(p => p !== sec) : [...prev, sec]
-    );
-  };
+export function ReasonStep({ primaryEmotion, reason, setReason }) {
+  const emotionData = PRIMARY_EMOTIONS.find(m => m.id === primaryEmotion);
 
   return (
-    <div style={{ flex:1, display:'flex', flexDirection:'column', paddingTop:8, overflowY:'auto', width:'100%', height:'100%' }} className="no-scrollbar">
-      <div style={{ padding:'0 16px 80px', position:'relative', display:'flex', flexDirection:'column', alignItems:'center' }}>
+    <div className="flex-1 flex flex-col pt-2 pb-24 overflow-y-auto w-full h-full no-scrollbar px-4">
+      <div className="flex flex-col items-center">
         
-        {/* The Card */}
-        <div style={{ background: mood.card, borderRadius: 24, padding:'50px 16px 24px', display:'flex', flexDirection:'column', alignItems:'center', position:'relative', boxShadow:'0 4px 20px rgba(0,0,0,0.1)', width:'100%', maxWidth:400, marginTop:50 }}>
-          
-          {/* Peeking Character Face */}
-          <div style={{ position:'absolute', top: -40, left:'50%', transform:'translateX(-50%)', width:80, height:80, borderRadius:'50%', background: mood.body, boxShadow:'0 4px 10px rgba(0,0,0,0.15)', overflow:'hidden' }}>
-            <div style={{ position:'absolute', top:'55%', left:'50%', transform:'translate(-50%, -50%) scale(0.45)', width:150, height:120 }}>
-              <FaceFeatures type={mood.face || 'default'} />
-            </div>
-          </div>
-
-          <h2 style={{ margin:'16px 0 24px', fontSize:22, fontWeight:700, color:'#2b2b2b', textAlign:'center', lineHeight:1.3 }}>
-            What made you feel<br/>{mood.label || 'this way'} today?
+        {/* Title & Emotion Image */}
+        <div className="text-center mb-8">
+          {emotionData && (
+            <motion.div 
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              className="w-20 h-20 mx-auto mb-4 rounded-2xl overflow-hidden shadow-lg border border-white/10"
+            >
+              <img 
+                src={emotionData.img} 
+                alt={emotionData.label} 
+                className="w-full h-full object-cover" 
+                onError={(e) => { e.target.onerror = null; e.target.src = '/avatar-student.png' }}
+              />
+            </motion.div>
+          )}
+          <h2 className="text-2xl font-bold text-white mb-2 leading-tight">
+            What made you feel<br/>{emotionData ? emotionData.label.toLowerCase() : 'this way'} today?
           </h2>
+          <p className="text-white/50 text-[14px]">Select the main reason</p>
+        </div>
 
-          {/* Primary Reasons Grid */}
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(3, 1fr)', gap:10, width:'100%', marginBottom:32 }}>
-            {REASONS.map(r => {
-              const active = reason === r.id;
-              return (
-                <button 
-                  key={r.id} 
-                  onClick={() => setReason(r.id)}
-                  style={{ 
-                    background: active ? (mood.pill || '#000') : '#ffffff', 
-                    borderRadius:16, 
-                    padding:'16px 8px', 
-                    border:'none', 
-                    display:'flex', 
-                    flexDirection:'column', 
-                    alignItems:'center', 
-                    gap:8, 
-                    cursor:'pointer',
-                    boxShadow:'0 2px 8px rgba(0,0,0,0.05)',
-                    transition:'all 0.2s'
-                  }}
-                >
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill={active ? '#fff' : (mood.pill || '#000')}>
-                    {r.icon}
-                  </svg>
-                  <span style={{ fontSize:11, fontWeight:700, color: active ? '#fff' : (mood.pill || '#000'), textTransform:'capitalize' }}>
-                    {r.label}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-
-          <p style={{ fontSize:10, fontWeight:700, color:'#888', letterSpacing:0.5, marginBottom:16 }}>
-            FEELING ANYTHING ELSE?
-          </p>
-
-          {/* Secondary Pills */}
-          <div style={{ display:'flex', flexWrap:'wrap', gap:8, justifyContent:'center' }}>
-            {SECONDARY.map(sec => {
-              const active = secondaryReasons.includes(sec);
-              return (
-                <button
-                  key={sec}
-                  onClick={() => toggleSecondary(sec)}
-                  style={{
-                    background: active ? (mood.pill || '#000') : '#ffffff',
-                    color: active ? '#ffffff' : (mood.pill || '#000'),
-                    border: 'none',
-                    padding: '8px 16px',
-                    borderRadius: 20,
-                    fontSize: 13,
-                    fontWeight: 700,
-                    cursor: 'pointer',
-                    boxShadow: '0 2px 6px rgba(0,0,0,0.04)',
-                    transition: 'all 0.2s'
-                  }}
-                >
-                  {sec}
-                </button>
-              );
-            })}
-          </div>
+        {/* Primary Reasons Grid */}
+        <div className="grid grid-cols-3 gap-3 w-full max-w-[400px]">
+          {REASONS.map(r => {
+            const active = reason === r.id;
+            return (
+              <motion.button 
+                whileTap={{ scale: 0.95 }}
+                key={r.id} 
+                onClick={() => setReason(r.id)}
+                className={`flex flex-col items-center justify-center p-4 rounded-2xl transition-all border ${
+                  active 
+                    ? 'bg-[#eab308] border-[#eab308] text-[#111111]' 
+                    : 'bg-[#1c1c21] border-white/5 text-white/70 hover:bg-[#25252b]'
+                }`}
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="mb-2">
+                  {r.icon}
+                </svg>
+                <span className="text-[12px] font-semibold tracking-wide">
+                  {r.label}
+                </span>
+              </motion.button>
+            );
+          })}
         </div>
       </div>
     </div>
