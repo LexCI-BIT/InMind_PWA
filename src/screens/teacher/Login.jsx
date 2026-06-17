@@ -2,17 +2,17 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useRole } from '../../context/RoleContext';
-import { loginStudent, saveAuthSession } from '../../lib/api';
+import { saveAuthSession } from '../../lib/api';
 
 /**
- * Student Login — matches the exact UI from the screenshot:
+ * Teacher Login — matches the exact UI from the Parent login:
  * Black background, "Login" title, off-white inputs, bright purple button.
  */
-export function StudentLogin() {
+export function TeacherLogin() {
   const navigate = useNavigate();
   const { setRole } = useRole();
-  const [identifier, setIdentifier] = useState('STU001');
-  const [password, setPassword] = useState('student123');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -22,24 +22,22 @@ export function StudentLogin() {
     setLoading(true);
 
     const payload = {
-      school_id: 'DEMO001',
-      class_name: '9A',
-      student_id: identifier,
+      email: email,
       password: password,
     };
 
-    console.log("Login Payload (Ready for Backend):", payload);
+    console.log("Teacher Login Payload (Ready for Backend):", payload);
 
     // Mock successful login since there is no backend
     setTimeout(() => {
       const mockResponse = {
-        access_token: "mock_token_123",
-        user: { id: 1, role: "student", student_id: identifier }
+        access_token: "mock_token_teacher_login_123",
+        user: { id: 3, role: "teacher", email: email }
       };
       
       saveAuthSession(mockResponse);
-      setRole('student');
-      navigate('/student/path-select');
+      setRole('teacher');
+      navigate('/teacher/home');
       setLoading(false);
     }, 1000);
   };
@@ -76,15 +74,15 @@ export function StudentLogin() {
           onSubmit={handleSubmit}
           className="flex flex-col gap-4"
         >
-          {/* Email / Student ID */}
+          {/* Email */}
           <label className="rounded-[14px] bg-[#f4f4f5] px-5 py-4 flex items-center">
             <input
-              type="text"
+              type="email"
               required
               autoComplete="username"
-              value={identifier}
-              onChange={(e) => setIdentifier(e.target.value)}
-              placeholder="Email or Student ID"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Email"
               className="w-full bg-transparent text-[16px] font-medium text-[#111] placeholder:text-[#9b9690] focus:outline-none"
             />
           </label>
@@ -119,7 +117,7 @@ export function StudentLogin() {
           </motion.button>
 
           <div className="mt-4 text-center text-[15px] font-medium text-[#e4e4e7]">
-            Dont have an account ? <button type="button" onClick={() => navigate('/student/welcome')} className="text-white transition hover:text-white/80">Sign Up</button>
+            Dont have an account ? <button type="button" onClick={() => navigate('/teacher/welcome')} className="text-white transition hover:text-white/80">Sign Up</button>
           </div>
         </motion.form>
       </div>

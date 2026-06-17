@@ -11,6 +11,7 @@ import { RoleSelect } from './screens/RoleSelect';
 
 // ─── Student (10 Main Routes) ───────────────────────────────
 import { StudentLogin } from './screens/student/Login';
+import { StudentWelcome } from './screens/student/Welcome';
 import { StudentSignUp } from './screens/student/SignUp';
 import { MoodCheck } from './screens/student/MoodCheck';
 import { StudentHome } from './screens/student/Home';
@@ -55,6 +56,8 @@ import { Notifications } from './screens/student/Notifications';
 
 // ─── Parent ─────────────────────────────────────────────────
 import { ParentHome } from './screens/parent/Home';
+import { ParentWelcome } from './screens/parent/Welcome';
+import { ParentLogin } from './screens/parent/Login';
 import { ParentAnnouncements } from './screens/parent/ParentAnnouncements';
 import { ParentProfile } from './screens/parent/ParentProfile';
 import { ParentSignUp } from './screens/parent/SignUp';
@@ -65,6 +68,9 @@ import { ParentInsights } from './screens/parent/ParentInsights';
 
 // ─── Teacher ────────────────────────────────────────────────
 import { TeacherHome } from './screens/teacher/Home';
+import { TeacherWelcome } from './screens/teacher/Welcome';
+import { TeacherLogin } from './screens/teacher/Login';
+import { TeacherSignUp } from './screens/teacher/SignUp';
 import { QuizManager } from './screens/teacher/QuizManager';
 import { QuizSessions } from './screens/teacher/QuizSessions';
 import { QuizCreation } from './screens/teacher/QuizCreation';
@@ -130,6 +136,7 @@ function AnimatedRoutes() {
         <Route path="/home" element={<HomeRedirect />} />
 
         {/* ─── Student: Auth ─── */}
+        <Route path="/student/welcome" element={<StudentWelcome />} />
         <Route path="/student/login" element={<StudentLogin />} />
         <Route path="/student/signup" element={<StudentSignUp />} />
         <Route path="/student/path-select" element={<PathSelect />} />
@@ -176,6 +183,8 @@ function AnimatedRoutes() {
         <Route path="/student/notifications" element={<Notifications />} />
 
         {/* ─── Parent Routes ─── */}
+        <Route path="/parent/welcome" element={<ParentWelcome />} />
+        <Route path="/parent/login" element={<ParentLogin />} />
         <Route path="/parent/signup" element={<ParentSignUp />} />
         <Route path="/parent/home" element={<ParentHome />} />
         <Route path="/parent/weekly" element={<WeeklyTimeline />} />
@@ -186,6 +195,9 @@ function AnimatedRoutes() {
         <Route path="/parent/profile" element={<ParentProfile />} />
 
         {/* ─── Teacher Routes ─── */}
+        <Route path="/teacher/welcome" element={<TeacherWelcome />} />
+        <Route path="/teacher/login" element={<TeacherLogin />} />
+        <Route path="/teacher/signup" element={<TeacherSignUp />} />
         <Route path="/teacher/home" element={<TeacherHome />} />
         <Route path="/teacher/sessions" element={<QuizSessions />} />
         <Route path="/teacher/create-quiz" element={<QuizCreation />} />

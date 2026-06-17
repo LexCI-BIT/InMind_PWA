@@ -12,7 +12,7 @@ const ROLES = [
     Icon: GraduationIcon,
     iconBg: 'bg-[#ede9fe]',
     iconColor: 'text-[#7c3aed]',
-    next: '/student/path-select',
+    next: '/student/welcome',
   },
   {
     id: 'parent',
@@ -21,7 +21,7 @@ const ROLES = [
     Icon: TreeIcon,
     iconBg: 'bg-neutral-200',
     iconColor: 'text-neutral-700',
-    next: '/parent/home',
+    next: '/parent/welcome',
   },
   {
     id: 'teacher',
@@ -30,7 +30,7 @@ const ROLES = [
     Icon: UserCardIcon,
     iconBg: 'bg-neutral-200',
     iconColor: 'text-neutral-700',
-    next: '/teacher/home',
+    next: '/teacher/welcome',
   },
 ];
 
