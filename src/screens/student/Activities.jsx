@@ -6,9 +6,11 @@ import { FocusTimer } from './FocusTimer';
 import { Breathing } from './Breathing';
 import { Meditation } from './Meditation';
 import { YogaSession } from './YogaSession';
+import { useDailyStaticGate } from '../../lib/useDailyStaticGate';
 
 export function Activities() {
   const navigate = useNavigate();
+  useDailyStaticGate(); // non-academic section → ensure today's static check-in
   const [showFocus, setShowFocus] = useState(false);
   const [showBreathing, setShowBreathing] = useState(false);
   const [showMeditation, setShowMeditation] = useState(false);

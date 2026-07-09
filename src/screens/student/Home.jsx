@@ -5,6 +5,7 @@ import { StudentDock } from '../../components/StudentDock';
 import { Streaks } from './Streaks';
 import { StudentCalendar } from './Calendar';
 import { Breathing } from './Breathing';
+import { useDailyStaticGate } from '../../lib/useDailyStaticGate';
 
 /**
  * StudentHome — pixel-faithful rebuild from the long Figma frame.
@@ -148,6 +149,7 @@ const TREND = [
 
 export function StudentHome() {
   const navigate = useNavigate();
+  useDailyStaticGate(); // once-per-day static check-in gate (on login/landing)
   const [showStreaks, setShowStreaks] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
   const [showBreathing, setShowBreathing] = useState(false);

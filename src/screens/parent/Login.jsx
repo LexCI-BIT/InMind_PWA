@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useRole } from '../../context/RoleContext';
-import { saveAuthSession } from '../../lib/api';
+import { loginUser, saveAuthSession, clearAuthSession } from '../../lib/api';
 
 /**
  * Parent Login — matches the exact UI from the screenshot:
@@ -21,25 +21,22 @@ export function ParentLogin() {
     setError('');
     setLoading(true);
 
-    const payload = {
-      email: email,
-      password: password,
-    };
-
-    console.log("Parent Login Payload (Ready for Backend):", payload);
-
-    // Mock successful login since there is no backend
-    setTimeout(() => {
-      const mockResponse = {
-        access_token: "mock_token_parent_login_123",
-        user: { id: 2, role: "parent", email: email }
-      };
-      
-      saveAuthSession(mockResponse);
+    try {
+      const res = await loginUser({ email, password });
+      // Only parent accounts may sign into the parent portal.
+      if ((res.role || '') !== 'parent') {
+        clearAuthSession();
+        setError('This account is not a parent account. Use the student or teacher login.');
+        return;
+      }
+      saveAuthSession(res);
       setRole('parent');
       navigate('/parent/home');
+    } catch (err) {
+      setError(err.message || 'Login failed. Check your credentials.');
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   return (

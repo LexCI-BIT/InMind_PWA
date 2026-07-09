@@ -18,9 +18,10 @@ import {
   updateResponse,
   updateCurrentStep,
   clearSessionState,
+  loadSessionState,
   FLOW_CONFIG,
 } from '../../../lib/behavioral';
-import { getDailyFlowScreen, submitScreenResponse, submitBodyMap } from '../../../lib/api';
+import { getDailyFlowScreen, submitScreenResponse, submitBodyMap, submitFlowSession, localDate } from '../../../lib/api';
 
 const slideVariants = {
   enter: (direction) => ({
@@ -108,21 +109,54 @@ export default function DailyCheckinFlow() {
     }
   }, [tracker, step]);
 
-  const completeFlow = useCallback(async () => {
-    logSessionSummary('static', sessionRef.current.active_session_id, allMetadataRef.current);
-    
-    // Advance backend session to step 7
-    if (sessionRef.current.active_session_id) {
-      try {
-        await getDailyFlowScreen(sessionRef.current.active_session_id);
-      } catch (e) {
-        console.error("Failed to advance backend session:", e);
+  // Answers for a given step, mapped to the static_flow_responses columns.
+  const answerForStep = (n) => {
+    switch (n) {
+      case 1: return { selected_context: context };
+      case 2: return { energy_value: energy };
+      case 3: return { primary_emotion: primaryEmotion, sub_emotion: secondaryReasons[0] || null };
+      case 4: return { body_zone: activeBodyArea };
+      case 5: {
+        const s = bodySensations[activeBodyArea] || {};
+        return { sensation_type: s.sensation || null, sensation_intensity: s.intensity ?? null };
       }
+      default: return {};
+    }
+  };
+
+  const completeFlow = async () => {
+    const sessionId = sessionRef.current.active_session_id;
+    const sessionState = loadSessionState('static');
+    const allResponses = sessionState?.responses || {};
+
+    // Build the full session summary (session + step metrics + signals + flags).
+    const result = logSessionSummary('static', sessionId, allMetadataRef.current, allResponses);
+
+    try {
+      const payload = result?.backendPayload;
+      if (payload) {
+        // Tag the session with the student's LOCAL date so it's stored as that
+        // day's one-and-only check-in (resets at local midnight).
+        const today = localDate();
+        if (payload.session) payload.session.local_date = today;
+        // Flatten each screen's answer into the step row so the backend can
+        // persist it into the static_flow_responses columns.
+        payload.steps = (payload.steps || []).map((st) => ({
+          ...st,
+          screen_type: STEP_TO_SCREEN_TYPE[st.step_number] || st.screen_name,
+          ...answerForStep(st.step_number),
+        }));
+        await submitFlowSession(payload);
+        // Mark today's check-in done so the gate doesn't re-trigger today.
+        try { localStorage.setItem('inmind_static_last', today); } catch {}
+      }
+    } catch (e) {
+      console.error('Failed to save static flow session:', e);
     }
 
     clearSessionState('static');
     navigate('/student/home');
-  }, [navigate]);
+  };
 
   const nextStep = () => {
     if (step === 1 && !context) return;

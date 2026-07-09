@@ -1,7 +1,21 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { StudentDock } from '../../components/StudentDock';
+import { listThoughts } from '../../lib/api';
+
+function timeAgo(iso) {
+  if (!iso) return '';
+  const diff = Date.now() - new Date(iso).getTime();
+  if (Number.isNaN(diff)) return '';
+  const m = Math.floor(diff / 60000);
+  if (m < 1) return 'just now';
+  if (m < 60) return `${m}m ago`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `${h}h ago`;
+  const d = Math.floor(h / 24);
+  return d < 7 ? `${d}d ago` : new Date(iso).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+}
 
 /**
  * Notifications — Figma-faithful alerts list.
@@ -78,6 +92,16 @@ export function Notifications() {
   const [query, setQuery] = useState('');
   const [urgent, setUrgent] = useState(INITIAL_URGENT);
   const [calendared, setCalendared] = useState(new Set());
+  const [thoughts, setThoughts] = useState([]);
+
+  // Live "Share a Thought" feed from classmates (same class, any section).
+  useEffect(() => {
+    let active = true;
+    listThoughts()
+      .then((d) => active && setThoughts(Array.isArray(d) ? d : []))
+      .catch(() => { /* leave empty on error */ });
+    return () => { active = false; };
+  }, []);
 
   const matches = (n) => {
     if (!query.trim()) return true;
@@ -90,6 +114,14 @@ export function Notifications() {
   const today = useMemo(() => TODAY.filter(matches), [query]);
   const earlier = useMemo(() => EARLIER.filter(matches), [query]);
   const urgentVisible = urgent.filter(matches);
+  const classThoughts = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return thoughts.filter((t) =>
+      !q ||
+      (t.content || '').toLowerCase().includes(q) ||
+      (t.is_anonymous ? 'anonymous' : (t.author_name || '')).toLowerCase().includes(q),
+    );
+  }, [thoughts, query]);
 
   const dismiss = (id) => setUrgent((prev) => prev.filter((u) => u.id !== id));
   const toggleCal = (id) =>
@@ -129,6 +161,34 @@ export function Notifications() {
             <SearchIcon />
           </label>
         </div>
+
+        {/* ───── FROM YOUR CLASS (Share a Thought feed) ───── */}
+        {classThoughts.length > 0 && (
+          <>
+            <SectionHeader label="From Your Class" />
+            <ul className="mt-3 flex flex-col gap-3 px-5">
+              {classThoughts.map((t) => (
+                <li key={t.id} className="flex items-start gap-3 rounded-[20px] bg-[#262626] p-4">
+                  <span
+                    className="grid size-11 shrink-0 place-items-center rounded-2xl text-white"
+                    style={{ backgroundColor: t.is_anonymous ? '#525252' : '#7c3aed' }}
+                  >
+                    <ThoughtIcon />
+                  </span>
+                  <div className="flex-1">
+                    <div className="flex items-start justify-between gap-2">
+                      <p className="text-[14px] font-bold text-white">
+                        {t.is_anonymous ? 'Anonymous classmate' : (t.author_name || 'Classmate')}
+                      </p>
+                      <span className="shrink-0 text-[11px] font-medium text-white/45">{timeAgo(t.created_at)}</span>
+                    </div>
+                    <p className="mt-0.5 text-[12.5px] leading-snug text-white/70">{t.content}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
 
         {/* ───── URGENT ───── */}
         {urgentVisible.length > 0 && (
@@ -178,10 +238,10 @@ export function Notifications() {
         )}
 
         {/* empty state */}
-        {urgentVisible.length === 0 && today.length === 0 && earlier.length === 0 && (
+        {urgentVisible.length === 0 && today.length === 0 && earlier.length === 0 && classThoughts.length === 0 && (
           <div className="mt-20 px-7 text-center">
             <p className="text-[14px] text-white/55">
-              No notifications match "{query}"
+              {query ? `No notifications match "${query}"` : 'Nothing here yet'}
             </p>
           </div>
         )}
@@ -311,6 +371,13 @@ function MegaphoneIcon() {
   return (
     <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M3 11v2a3 3 0 0 0 3 3l2 4 3-1-1-3h3l8 4V4l-8 4H6a3 3 0 0 0-3 3z" />
+    </svg>
+  );
+}
+function ThoughtIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 11.5a8.38 8.38 0 0 1-9 8.34 8.5 8.5 0 0 1-3.6-.84L3 20l1.34-4A8.38 8.38 0 0 1 3.66 8 8.5 8.5 0 0 1 12 3.5a8.38 8.38 0 0 1 9 8z" />
     </svg>
   );
 }

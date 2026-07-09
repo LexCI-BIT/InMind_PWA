@@ -15,14 +15,24 @@ export function QuizComplete() {
   const { state } = useLocation();
   const score = state?.score ?? 0;
   const total = state?.total ?? 10;
-  const pct = total ? Math.round((score / total) * 100) : 0;
+  const pct =
+    state?.percentage != null
+      ? Math.round(state.percentage)
+      : total
+      ? Math.round((score / total) * 100)
+      : 0;
 
-  // Tier copy keyed off percentage.
-  const tier =
-    pct >= 90 ? { label: 'PERFECT',   line: 'Outstanding emotional awareness today!' }
-    : pct >= 70 ? { label: 'EXCELLENT', line: 'You understood emotional awareness well today' }
-    : pct >= 50 ? { label: 'GOOD',     line: 'Solid effort — a few gaps to revisit' }
-    :              { label: 'KEEP GOING', line: 'Every quiz is practice. Try again tomorrow!' };
+  // Prefer the tier the backend computed; fall back to a percentage-based one.
+  const TIER_COPY = {
+    PERFECT: 'Outstanding — a perfect score!',
+    EXCELLENT: 'Excellent work — you really know this',
+    GOOD: 'Solid effort — a few gaps to revisit',
+    'KEEP GOING': 'Every quiz is practice. Try again tomorrow!',
+  };
+  const tierLabel =
+    state?.tier ||
+    (pct >= 100 ? 'PERFECT' : pct >= 80 ? 'EXCELLENT' : pct >= 50 ? 'GOOD' : 'KEEP GOING');
+  const tier = { label: tierLabel, line: TIER_COPY[tierLabel] || TIER_COPY['KEEP GOING'] };
 
   return (
     <section className="relative mx-auto flex min-h-[100dvh] w-full max-w-[440px] flex-col overflow-hidden bg-[#181818] text-white">
@@ -146,16 +156,19 @@ export function QuizComplete() {
           >
             Back To Home
           </motion.button>
-          <button
-            type="button"
-            className="mt-3 flex w-full items-center justify-center gap-1.5 text-[13px] font-semibold text-white/55 transition hover:text-white"
-          >
-            <svg viewBox="0 0 20 20" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M3 10a7 7 0 0 1 14 0 7 7 0 0 1-14 0z" />
-              <path d="M10 7v3l2 2" />
-            </svg>
-            Review Answers
-          </button>
+          {state?.quizId && (
+            <button
+              type="button"
+              onClick={() => navigate('/student/quiz/result', { state: { quizId: state.quizId } })}
+              className="mt-3 flex w-full items-center justify-center gap-1.5 text-[13px] font-semibold text-white/55 transition hover:text-white"
+            >
+              <svg viewBox="0 0 20 20" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M1 10s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6z" />
+                <circle cx="10" cy="10" r="2.5" />
+              </svg>
+              Review Answers
+            </button>
+          )}
         </motion.div>
       </div>
     </section>

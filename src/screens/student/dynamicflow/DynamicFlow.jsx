@@ -23,6 +23,7 @@ import {
   updateResponse,
   updateCurrentStep,
   clearSessionState,
+  loadSessionState,
   FLOW_CONFIG,
 } from '../../../lib/behavioral';
 import { getDailyFlowScreen, submitScreenResponse } from '../../../lib/api';
@@ -120,7 +121,11 @@ export default function DynamicFlow({ week, dayIndex, onBack, onComplete }) {
   }, [tracker, step]);
 
   const completeFlow = useCallback(async () => {
-    logSessionSummary('dynamic', sessionRef.current.active_session_id, allMetadataRef.current);
+    // Gather all responses from the session
+    const sessionState = loadSessionState('dynamic');
+    const allResponses = sessionState?.responses || {};
+
+    logSessionSummary('dynamic', sessionRef.current.active_session_id, allMetadataRef.current, allResponses);
     if (sessionRef.current.active_session_id) {
       try {
         await getDailyFlowScreen(sessionRef.current.active_session_id);

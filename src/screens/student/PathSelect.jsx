@@ -1,16 +1,42 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { getStaticToday, localDate } from '../../lib/api';
 
 /**
  * PathSelect — After login, students choose their focus path:
  *   • Academic  → /student/academic
- *   • Non-Academic (Wellness) → /student/home
+ *   • Non-Academic (Wellness) → daily static check-in (once/day), else home
  *
  * Dark theme with two large tappable cards.
  */
 
 export function PathSelect() {
   const navigate = useNavigate();
+  const [checking, setChecking] = useState(false);
+
+  // Entering the non-academic section: ask the daily static check-in only once
+  // per day. The backend is the source of truth (GET /api/flows/today) — if a
+  // row exists for today → straight to home; if not → do the check-in.
+  async function enterNonAcademic() {
+    if (checking) return;
+    setChecking(true);
+    const today = localDate();
+    try {
+      const res = await getStaticToday(today);
+      if (res?.completed_today) {
+        try { localStorage.setItem('inmind_static_last', today); } catch { /* ignore */ }
+        navigate('/student/home');          // already checked in today → home
+      } else {
+        try { localStorage.removeItem('inmind_static_last'); } catch { /* ignore */ }
+        navigate('/student/daily-checkin');  // no check-in today → take the flow
+      }
+    } catch {
+      navigate('/student/daily-checkin');    // unsure → ask (safe default)
+    } finally {
+      setChecking(false);
+    }
+  }
 
   return (
     <section className="relative mx-auto flex min-h-[100dvh] w-full max-w-[440px] flex-col overflow-hidden bg-[#1a1a1a] font-sans">
@@ -92,12 +118,13 @@ export function PathSelect() {
         {/* ── Non-Academic Card ── */}
         <motion.button
           type="button"
-          onClick={() => navigate('/student/daily-checkin')}
+          onClick={enterNonAcademic}
+          disabled={checking}
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.2 }}
           whileTap={{ scale: 0.97 }}
-          className="w-full rounded-[24px] p-6 text-left transition hover:brightness-105"
+          className="w-full rounded-[24px] p-6 text-left transition hover:brightness-105 disabled:opacity-70"
           style={{ background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%)' }}
         >
           <div className="flex items-start justify-between">
@@ -124,7 +151,7 @@ export function PathSelect() {
           </div>
 
           <div className="flex items-center gap-2 mt-5">
-            <span className="text-[11px] font-bold text-[#1a1a1a]/70">Explore →</span>
+            <span className="text-[11px] font-bold text-[#1a1a1a]/70">{checking ? 'Checking…' : 'Explore →'}</span>
           </div>
         </motion.button>
       </div>
