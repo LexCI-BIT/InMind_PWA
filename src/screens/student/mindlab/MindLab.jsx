@@ -222,56 +222,6 @@ export function MindLab() {
             </div>
           </div>
         </motion.div>
-        {/* Audio Space Card */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 0.4 }}
-          className="relative mt-5 w-full overflow-hidden rounded-[14px] bg-[#1a1b1f] border-l-[3px] border-[#dca331] shadow-lg"
-        >
-          <div className="flex justify-between items-center px-6 py-8">
-            
-            {/* Left Content */}
-            <div className="relative z-10 flex-1 max-w-[180px]">
-              <p className="text-[9px] font-bold tracking-[0.15em] text-white/40 uppercase mb-2">
-                Audio Space
-              </p>
-              <h3 className="text-[20px] font-normal leading-tight text-white mb-2">
-                Listen.<br/>Relax. Grow.
-              </h3>
-              <p className="text-[10px] leading-relaxed text-white/50 mb-5 max-w-[150px]">
-                Audiobooks, meditations, and focus sessions for your mind.
-              </p>
-              
-              <button
-                type="button"
-                onClick={() => navigate('/student/audio')}
-                className="flex items-center gap-1.5 rounded-full bg-[#9e7427] px-4 py-1.5 text-[11px] font-medium text-[#fcedc7] transition hover:bg-[#b2842e]"
-              >
-                Explore
-                <svg viewBox="0 0 20 20" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M4 10h12" />
-                  <path d="M12 6l4 4-4 4" />
-                </svg>
-              </button>
-            </div>
-
-            {/* Right Icon (Headphones) */}
-            <div className="absolute right-4 top-1/2 -translate-y-1/2 w-[120px] pointer-events-none mix-blend-lighten">
-              <svg viewBox="0 0 100 100" className="w-full h-auto drop-shadow-xl opacity-80">
-                <defs>
-                  <linearGradient id="hp-grad" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stopColor="#a78bfa" />
-                    <stop offset="100%" stopColor="#6366f1" />
-                  </linearGradient>
-                </defs>
-                <path d="M50 15C30.15 15 14 31.15 14 51v20c0 5.52 4.48 10 10 10h8V51c0-9.94 8.06-18 18-18s18 8.06 18 18v30h8c5.52 0 10-4.48 10-10V51c0-19.85-16.15-36-36-36z" fill="url(#hp-grad)" opacity="0.7" />
-                <rect x="14" y="51" width="12" height="26" rx="6" fill="url(#hp-grad)" opacity="0.9" />
-                <rect x="74" y="51" width="12" height="26" rx="6" fill="url(#hp-grad)" opacity="0.9" />
-              </svg>
-            </div>
-          </div>
-        </motion.div>
 
       </div>
     </section>

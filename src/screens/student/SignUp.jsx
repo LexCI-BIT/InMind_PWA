@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Eye, EyeOff, Camera, CloudUpload, Phone } from 'lucide-react';
 import { useRole } from '../../context/RoleContext';
 import { saveAuthSession, signupStudent } from '../../lib/api';
-import { loadSessionState } from '../../lib/behavioral';
 
 const slideVariants = {
   enter: (direction) => ({
@@ -82,57 +81,41 @@ export function StudentSignUp() {
     const monthIndex = MONTHS.indexOf(birthMonth) + 1;
     const dobString = `${birthYear}-${String(monthIndex).padStart(2, '0')}-${birthDay}`;
 
-    // Gather flow session data (responses + behavioral signals)
-    const staticSession = loadSessionState('static');
-    const dynamicSession = loadSessionState('dynamic');
+    const formData = new FormData();
+    formData.append("roll_number", rollNumber);
+    formData.append("password", password);
+    formData.append("school_email", email);
+    formData.append("parents_name", parentName);
+    formData.append("parents_phone", parentNumber);
+    formData.append("board", board);
+    formData.append("class_name", className);
+    formData.append("section", section);
+    formData.append("school_name", schoolName);
+    formData.append("blood_group", bloodGroup);
+    formData.append("height", height);
+    formData.append("weight", weight);
+    formData.append("mobile_verification", verificationCode.join(''));
+    formData.append("date_of_birth", dobString);
+    formData.append("mobile_number", parentNumber);
 
-    // Build the payload that matches the backend StudentSignup schema.
-    // The school email doubles as the auth email for the student account.
-
-    // Required fields — always sent (Pydantic gives a clear error if empty)
-    const apiPayload = {
-      email: email,
-      password: password,
-      roll_number: rollNumber,
-    };
-
-    // Optional fields — only include if not empty
-    const optionalFields = {
-      phone_number: parentNumber,
-      school_email: email,
-      school_name: schoolName,
-      board: board,
-      class_name: className,
-      section: section,
-      date_of_birth: dobString,
-      blood_group: bloodGroup,
-      height: height,
-      weight: weight,
-      parents_name: parentName,
-      parents_phone: parentNumber,
-    };
-
-    for (const [key, val] of Object.entries(optionalFields)) {
-      if (val != null && val !== '') {
-        apiPayload[key] = val;
-      }
+    if (photoFile) {
+      formData.append("profile_photo", photoFile);
+    }
+    if (studentIdFile) {
+      formData.append("student_id_photo", studentIdFile);
     }
 
-    console.log("Student Signup Payload:", apiPayload);
-
-    try {
-      const res = await signupStudent(apiPayload);
-      if (!res?.access_token) {
-        throw new Error('Signup succeeded but no session was returned.');
-      }
-      saveAuthSession(res);
+    console.log("Signup FormData Payload (Ready for Backend):");
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}:`, value);
+    }
+    
+    // Mock successful signup
+    setTimeout(() => {
       setRole('student');
       navigate('/student/path-select');
-    } catch (err) {
-      setError(err.message || 'Signup failed. Please try again.');
-    } finally {
       setLoading(false);
-    }
+    }, 1000);
   };
 
   const handlePhotoUpload = (e) => {

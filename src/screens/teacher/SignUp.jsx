@@ -2,8 +2,7 @@ import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRole } from '../../context/RoleContext';
-import { saveAuthSession, signupTeacher } from '../../lib/api';
-import { loadSessionState } from '../../lib/behavioral';
+import { saveAuthSession } from '../../lib/api';
 
 const slideVariants = {
   enter: (direction) => ({
@@ -28,7 +27,6 @@ export function TeacherSignUp() {
   const [step, setStep] = useState(1);
   const [direction, setDirection] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
 
   // Form State
   const [fullName, setFullName] = useState('');
@@ -74,40 +72,33 @@ export function TeacherSignUp() {
     setStep((s) => s - 1);
   };
 
-  const handleComplete = async () => {
+  const handleComplete = () => {
     setLoading(true);
-    setError('');
 
-    // Convert month name -> ISO date (YYYY-MM-DD)
-    const monthIndex = months.indexOf(month) + 1;
-    const dobString = `${year}-${String(monthIndex).padStart(2, '0')}-${day}`;
-
-    const rawPayload = {
+    const payload = {
       full_name: fullName,
       email: email,
       password: password,
       phone_number: phone,
-      date_of_birth: dobString,
+      id_uploaded: idUploaded,
+      verification_code: verificationCode.join(''),
+      dob: `${year}-${month}-${day}`
     };
 
-    // Strip empty values to avoid Pydantic validation errors
-    const apiPayload = Object.fromEntries(
-      Object.entries(rawPayload).filter(([_, v]) => v != null && v !== '')
-    );
+    console.log("Teacher Signup Payload (Ready for Backend):", payload);
 
-    try {
-      const res = await signupTeacher(apiPayload);
-      if (!res?.access_token) {
-        throw new Error('Signup succeeded but no session was returned.');
-      }
-      saveAuthSession(res);
+    // Mock completing the teacher signup flow
+    setTimeout(() => {
+      const mockResponse = {
+        access_token: "mock_token_teacher_123",
+        user: { id: 3, role: "teacher", name: fullName }
+      };
+      
+      saveAuthSession(mockResponse);
       setRole('teacher');
       navigate('/teacher/home');
-    } catch (err) {
-      setError(err.message || 'Signup failed. Please try again.');
-    } finally {
       setLoading(false);
-    }
+    }, 1000);
   };
 
   const renderStep = () => {
@@ -485,13 +476,7 @@ export function TeacherSignUp() {
           {renderStep()}
         </motion.div>
       </AnimatePresence>
-
-      {error && (
-        <div className="absolute inset-x-6 bottom-6 z-50 rounded-xl border border-red-500/50 bg-red-500/20 px-4 py-3 text-center text-sm text-red-200">
-          {error}
-        </div>
-      )}
-
+      
     </section>
   );
 }

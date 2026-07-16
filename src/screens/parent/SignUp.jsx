@@ -2,8 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRole } from '../../context/RoleContext';
-import { saveAuthSession, signupParent } from '../../lib/api';
-import { loadSessionState } from '../../lib/behavioral';
+import { saveAuthSession } from '../../lib/api';
 
 const slideVariants = {
   enter: (direction) => ({
@@ -51,38 +50,31 @@ export function ParentSignUp() {
     setLoading(true);
     setError('');
 
-    // Gather flow session data (responses + behavioral signals)
-    const staticSession = loadSessionState('static');
-    const dynamicSession = loadSessionState('dynamic');
-
-    const rawPayload = {
+    const payload = {
       full_name: fullName,
       email: email,
       password: password,
       phone_number: phone,
+      verification_code: verificationCode.join(''),
       child_name: childName,
       child_class: childClass,
       child_section: childSection,
     };
 
-    // Strip empty values to avoid Pydantic validation errors
-    const apiPayload = Object.fromEntries(
-      Object.entries(rawPayload).filter(([_, v]) => v != null && v !== '')
-    );
+    console.log("Parent Signup Payload (Ready for Backend):", payload);
 
-    try {
-      const res = await signupParent(apiPayload);
-      if (!res?.access_token) {
-        throw new Error('Signup succeeded but no session was returned.');
-      }
-      saveAuthSession(res);
+    // Mock successful signup
+    setTimeout(() => {
+      const mockResponse = {
+        access_token: "mock_token_parent_123",
+        user: { id: 2, role: "parent", name: fullName }
+      };
+      
+      saveAuthSession(mockResponse);
       setRole('parent');
       navigate('/parent/home');
-    } catch (err) {
-      setError(err.message || 'Signup failed. Please try again.');
-    } finally {
       setLoading(false);
-    }
+    }, 1000);
   };
 
   const handleOtpChange = (index, value) => {
@@ -395,12 +387,6 @@ export function ParentSignUp() {
           </motion.div>
         </AnimatePresence>
       </div>
-
-      {error && (
-        <div className="absolute inset-x-6 bottom-6 z-30 rounded-xl border border-red-500/50 bg-red-500/20 px-4 py-3 text-center text-sm text-red-200">
-          {error}
-        </div>
-      )}
 
     </div>
   );

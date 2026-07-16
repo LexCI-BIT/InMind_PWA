@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { createThought } from '../../../lib/api';
 
 /**
  * ShareThought — three-step flow opened from the home "Share a Thought" tile.
@@ -23,21 +22,10 @@ export function ShareThought() {
   const [step, setStep] = useState('intro');
   const [text, setText] = useState('');
   const [identity, setIdentity] = useState('anonymous'); // 'anonymous' | 'named'
-  const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState('');
 
-  const handleSubmit = async () => {
-    if (!text.trim() || submitting) return;
-    setError('');
-    setSubmitting(true);
-    try {
-      await createThought({ content: text.trim(), is_anonymous: identity === 'anonymous' });
-      setStep('submitted');
-    } catch (e) {
-      setError(e.message || 'Could not share your thought. Please try again.');
-    } finally {
-      setSubmitting(false);
-    }
+  const handleSubmit = () => {
+    // TODO: POST { text, identity } to backend.
+    setStep('submitted');
   };
 
   return (
@@ -75,8 +63,6 @@ export function ShareThought() {
               setIdentity={setIdentity}
               onBack={() => navigate(-1)}
               onSubmit={handleSubmit}
-              submitting={submitting}
-              error={error}
             />
           </motion.div>
         )}
@@ -177,7 +163,7 @@ function Bullet({ children }) {
 
 /* ─── Form view ─── */
 
-function Form({ text, setText, identity, setIdentity, onBack, onSubmit, submitting, error }) {
+function Form({ text, setText, identity, setIdentity, onBack, onSubmit }) {
   return (
     <div className="flex flex-1 flex-col">
       {/* Header row */}
@@ -259,22 +245,19 @@ function Form({ text, setText, identity, setIdentity, onBack, onSubmit, submitti
 
       {/* Submit */}
       <div className="mt-auto px-7 pb-safe pb-8 pt-6">
-        {error && (
-          <p className="mb-3 text-center text-[12px] font-semibold text-red-400">{error}</p>
-        )}
         <motion.button
           type="button"
           onClick={onSubmit}
           whileTap={{ scale: 0.97 }}
-          disabled={text.trim().length === 0 || submitting}
+          disabled={text.trim().length === 0}
           className={[
             'w-full rounded-full py-4 text-[15.5px] font-bold transition',
-            text.trim().length === 0 || submitting
+            text.trim().length === 0
               ? 'cursor-not-allowed bg-emerald-500/30 text-white/55'
               : 'bg-emerald-400 text-[#0a2a1a] shadow-md shadow-emerald-400/25 hover:bg-emerald-300',
           ].join(' ')}
         >
-          {submitting ? 'Sharing…' : 'Submit'}
+          Submit
         </motion.button>
       </div>
     </div>

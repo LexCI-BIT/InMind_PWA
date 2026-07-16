@@ -1,8 +1,7 @@
-import { BrowserRouter, Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 
 import { RoleProvider, useRole } from './context/RoleContext';
-import { getAuthSession } from './lib/api';
 
 // ─── Shared / Onboarding ────────────────────────────────────
 import { SplashLogo } from './screens/SplashLogo';
@@ -19,10 +18,8 @@ import { StudentHome } from './screens/student/Home';
 import { Journal } from './screens/student/journal/Journal';
 import { Quiz } from './screens/student/quiz/Quiz';
 import { QuizList } from './screens/student/quiz/QuizList';
-import { QuizReview } from './screens/student/quiz/QuizReview';
 import { ShareThought } from './screens/student/share/ShareThought';
 import { AudioSpace } from './screens/student/AudioSpace';
-import { AudioPlayer } from './screens/student/AudioPlayer';
 // (Challenges moved below)
 import { Workshop } from './screens/student/Workshop';
 import { Activities } from './screens/student/Activities';
@@ -77,8 +74,6 @@ import { TeacherSignUp } from './screens/teacher/SignUp';
 import { QuizManager } from './screens/teacher/QuizManager';
 import { QuizSessions } from './screens/teacher/QuizSessions';
 import { QuizCreation } from './screens/teacher/QuizCreation';
-import { QuizResults } from './screens/teacher/QuizResults';
-import { StudentInsights } from './screens/teacher/StudentInsights';
 import { ClassAnalytics } from './screens/teacher/ClassAnalytics';
 import { TeacherProfile } from './screens/teacher/TeacherProfile';
 import { PriorityStudents } from './screens/teacher/PriorityStudents';
@@ -113,20 +108,6 @@ function HomeRedirect() {
 function LoginRedirect() {
   const { role } = useRole();
   return <Navigate to={LOGIN_MAP[role] || '/role'} replace />;
-}
-
-/**
- * RequireRole — guards a group of routes by the AUTHENTICATED account's role
- * (from the saved session, not the in-app role toggle). A student who lands on
- * a teacher URL is bounced to role select, so the teacher dashboard is only
- * reachable by a real teacher account.
- */
-function RequireRole({ role }) {
-  const session = getAuthSession();
-  if (!session?.access_token || session.role !== role) {
-    return <Navigate to="/role" replace />;
-  }
-  return <Outlet />;
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -175,10 +156,8 @@ function AnimatedRoutes() {
         <Route path="/student/journal" element={<Journal />} />
         <Route path="/student/quiz" element={<QuizList />} />
         <Route path="/student/quiz/take" element={<Quiz />} />
-        <Route path="/student/quiz/result" element={<QuizReview />} />
         <Route path="/student/share" element={<ShareThought />} />
         <Route path="/student/audio" element={<AudioSpace />} />
-        <Route path="/student/audio/play" element={<AudioPlayer />} />
         <Route path="/student/challenges" element={<WeeklyChallenges />} />
         <Route path="/student/challenges/progress" element={<ChallengesProgress />} />
         <Route path="/student/challenges/week1" element={<Week1 />} />
@@ -219,24 +198,19 @@ function AnimatedRoutes() {
         <Route path="/teacher/welcome" element={<TeacherWelcome />} />
         <Route path="/teacher/login" element={<TeacherLogin />} />
         <Route path="/teacher/signup" element={<TeacherSignUp />} />
-        {/* ─── Teacher dashboard — teacher accounts only ─── */}
-        <Route element={<RequireRole role="teacher" />}>
-          <Route path="/teacher/home" element={<TeacherHome />} />
-          <Route path="/teacher/sessions" element={<QuizSessions />} />
-          <Route path="/teacher/create-quiz" element={<QuizCreation />} />
-          <Route path="/teacher/results/:quizId" element={<QuizResults />} />
-          <Route path="/teacher/insights" element={<StudentInsights />} />
-          <Route path="/teacher/quiz" element={<QuizManager />} />
-          <Route path="/teacher/analytics" element={<ClassAnalytics />} />
-          <Route path="/teacher/profile" element={<TeacherProfile />} />
-          <Route path="/teacher/priority-students" element={<PriorityStudents />} />
-          <Route path="/teacher/checkin-summary" element={<CheckInSummary />} />
-          <Route path="/teacher/appreciation" element={<AppreciationScreen />} />
-          <Route path="/teacher/alerts" element={<TeacherAlerts />} />
-          <Route path="/teacher/report" element={<TeacherReport />} />
-          <Route path="/teacher/comparison" element={<ClassComparison />} />
-          <Route path="/teacher/participation" element={<ParticipationTracking />} />
-        </Route>
+        <Route path="/teacher/home" element={<TeacherHome />} />
+        <Route path="/teacher/sessions" element={<QuizSessions />} />
+        <Route path="/teacher/create-quiz" element={<QuizCreation />} />
+        <Route path="/teacher/quiz" element={<QuizManager />} />
+        <Route path="/teacher/analytics" element={<ClassAnalytics />} />
+        <Route path="/teacher/profile" element={<TeacherProfile />} />
+        <Route path="/teacher/priority-students" element={<PriorityStudents />} />
+        <Route path="/teacher/checkin-summary" element={<CheckInSummary />} />
+        <Route path="/teacher/appreciation" element={<AppreciationScreen />} />
+        <Route path="/teacher/alerts" element={<TeacherAlerts />} />
+        <Route path="/teacher/report" element={<TeacherReport />} />
+        <Route path="/teacher/comparison" element={<ClassComparison />} />
+        <Route path="/teacher/participation" element={<ParticipationTracking />} />
 
         {/* ─── Fallback ─── */}
         <Route path="*" element={<Navigate to="/" replace />} />

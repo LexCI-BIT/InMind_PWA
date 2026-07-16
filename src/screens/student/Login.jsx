@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useRole } from '../../context/RoleContext';
-import { loginUser, saveAuthSession, clearAuthSession } from '../../lib/api';
+import { loginStudent, saveAuthSession } from '../../lib/api';
 
 /**
  * Student Login — matches the exact UI from the screenshot:
@@ -11,8 +11,8 @@ import { loginUser, saveAuthSession, clearAuthSession } from '../../lib/api';
 export function StudentLogin() {
   const navigate = useNavigate();
   const { setRole } = useRole();
-  const [identifier, setIdentifier] = useState('');
-  const [password, setPassword] = useState('');
+  const [identifier, setIdentifier] = useState('STU001');
+  const [password, setPassword] = useState('student123');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -21,22 +21,27 @@ export function StudentLogin() {
     setError('');
     setLoading(true);
 
-    try {
-      const res = await loginUser({ email: identifier, password });
-      // Enforce the account's real role: only student accounts may use this login.
-      if ((res.role || 'student') !== 'student') {
-        clearAuthSession();
-        setError('This is not a student account. Please use the correct login for your role.');
-        return;
-      }
-      saveAuthSession(res);
+    const payload = {
+      school_id: 'DEMO001',
+      class_name: '9A',
+      student_id: identifier,
+      password: password,
+    };
+
+    console.log("Login Payload (Ready for Backend):", payload);
+
+    // Mock successful login since there is no backend
+    setTimeout(() => {
+      const mockResponse = {
+        access_token: "mock_token_123",
+        user: { id: 1, role: "student", student_id: identifier }
+      };
+      
+      saveAuthSession(mockResponse);
       setRole('student');
       navigate('/student/path-select');
-    } catch (err) {
-      setError(err.message || 'Login failed. Check your credentials.');
-    } finally {
       setLoading(false);
-    }
+    }, 1000);
   };
 
   return (

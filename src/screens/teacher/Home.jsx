@@ -258,12 +258,6 @@ export function TeacherHome() {
         >
           Start Quiz Session →
         </button>
-        <button
-          onClick={() => navigate('/teacher/insights')}
-          className="mt-3 w-full py-5 rounded-[20px] bg-[#7c3aed] text-white text-[18px] font-bold shadow-lg hover:bg-[#6d28d9] transition-all active:scale-[0.98]"
-        >
-          Wellbeing Insights →
-        </button>
       </motion.div>
 
       <TeacherDock active="home" />
